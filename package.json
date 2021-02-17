@@ -1,7 +1,7 @@
 {
   "name": "react-game",
   "version": "0.0.1",
-  "description": "Unblock it Game",
+  "description": "Battleship (game) - Guardians of the Galaxy Vol. 1",
   "main": "src/index.jsx",
   "scripts": {
     "build": "webpack --mode production",
@@ -39,6 +39,7 @@
     "css-loader": "^5.0.2",
     "eslint": "^7.20.0",
     "eslint-config-airbnb": "^18.2.1",
+    "eslint-import-resolver-webpack": "^0.13.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.22.0",
@@ -53,7 +54,6 @@
     "sass-loader": "^11.0.1",
     "style-loader": "^2.0.0",
     "stylelint": "^13.10.0",
-    "stylelint-config-airbnb": "0.0.0",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-order": "^4.1.0",
     "stylelint-scss": "^3.19.0",
@@ -65,10 +65,13 @@
   "dependencies": {
     "bootstrap": "^4.6.0",
     "bootswatch": "^4.6.0",
+    "firebase": "^8.2.7",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0"
   }
 }
