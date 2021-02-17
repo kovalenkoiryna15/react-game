@@ -1,4 +1,4 @@
-# Unblock It Game
+# Battleship Game
 
 ## Stack
 

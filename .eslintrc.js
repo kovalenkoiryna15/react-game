@@ -22,6 +22,12 @@ module.exports = {
     'react-hooks',
     'jsx-a11y',
   ],
-  rules: {
+  settings: {
+    'import/resolver': {
+      node: {},
+      webpack: {
+        config: 'webpack.config.js',
+      },
+    },
   },
 };
