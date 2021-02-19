@@ -8,7 +8,7 @@ export default function Game() {
     <Container fluid="true" className="justify-content-center align-items-center">
       <Row sm={12} xs={12}>
         <Board />
-        <Col sm={3} xs={12} />
+        <Col sm={4} xs={12} className="flex-grow-1" />
       </Row>
     </Container>
   );

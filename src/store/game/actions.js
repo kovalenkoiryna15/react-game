@@ -1,21 +1,21 @@
 import { database } from '../src/firebase';
 
 import {
-  GET_BOARD_SUCCESS,
-  GET_BOARD_FAILURE,
+  GET_ROWS_SUCCESS,
+  GET_ROWS_FAILURE,
   HIDE_LOADER,
   SHOW_LOADER,
 } from './constants';
 
-export const getBoardSuccess = (
+export const getRowsSuccess = (
   board,
 ) => ({
-  type: GET_BOARD_SUCCESS,
+  type: GET_ROWS_SUCCESS,
   payload: board,
 });
 
-export const getBoardFailure = (error) => ({
-  type: GET_BOARD_FAILURE,
+export const getRowsFailure = (error) => ({
+  type: GET_ROWS_FAILURE,
   payload: error,
 });
 
