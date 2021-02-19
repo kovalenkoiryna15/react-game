@@ -1,12 +1,24 @@
 import {
-  GET_BOARD_SUCCESS,
-  GET_BOARD_FAILURE,
+  GET_ROWS_SUCCESS,
+  GET_ROWS_FAILURE,
   HIDE_LOADER,
   SHOW_LOADER,
 } from './constants';
 
 const initialState = {
-  board: {
+  rows: {
+    0: {
+      A: 'A',
+      B: 'B',
+      C: 'C',
+      D: 'D',
+      E: 'E',
+      F: 'F',
+      G: 'G',
+      H: 'H',
+      I: 'I',
+      J: 'J',
+    },
     1: {
       A: false,
       B: false,
@@ -127,16 +139,28 @@ const initialState = {
       I: false,
       J: false,
     },
+    11: {
+      A: 'A',
+      B: 'B',
+      C: 'C',
+      D: 'D',
+      E: 'E',
+      F: 'F',
+      G: 'G',
+      H: 'H',
+      I: 'I',
+      J: 'J',
+    },
   },
   isLoading: false,
   error: undefined,
 };
 const handlers = {
-  [GET_BOARD_SUCCESS]: (state, { payload: board }) => ({
+  [GET_ROWS_SUCCESS]: (state, { payload: rows }) => ({
     ...state,
-    board,
+    rows,
   }),
-  [GET_BOARD_FAILURE]: (state, { payload: error }) => ({
+  [GET_ROWS_FAILURE]: (state, { payload: error }) => ({
     ...state,
     error,
   }),
