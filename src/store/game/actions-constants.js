@@ -3,3 +3,6 @@ export const GET_ROWS_FAILURE = 'GAME/GET_ROWS_FAILURE';
 export const GET_ROWS_SUCCESS = 'GAME/GET_ROWS_SUCCESS';
 export const HIDE_LOADER = 'GAME/HIDE_LOADER';
 export const SHOW_LOADER = 'GAME/SHOW_LOADER';
+export const HIT_SHIP = 'GAME/HIT_SHIP';
+export const MISS_HIT = 'GAME/MISS_HIT';
+export const COUNT_ATTACK = 'GAME/COUNT_ATTACK';

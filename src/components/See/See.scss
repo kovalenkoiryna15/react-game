@@ -1,3 +1,11 @@
 .square .content.see {
-  background: blue;
+  background: rgb(51, 131, 197);
+}
+
+.see.btn:disabled {
+  opacity: 1;
+}
+
+.square .content.see.lose {
+  background: rgb(6, 6, 22);
 }

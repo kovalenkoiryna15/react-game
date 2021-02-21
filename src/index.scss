@@ -8,5 +8,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.root {
+  min-height: 100vh;
+}
+
 // Bootstrap
+@import "~bootswatch/dist/sketchy/variables";
 @import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/sketchy/bootswatch";

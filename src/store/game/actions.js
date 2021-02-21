@@ -11,6 +11,9 @@ import {
   HIDE_LOADER,
   SHOW_LOADER,
   SET_RANDOM_SHIP_POSITIONS,
+  HIT_SHIP,
+  COUNT_ATTACK,
+  MISS_HIT,
 } from './actions-constants';
 
 import randomizeShips from '~utils';
@@ -44,6 +47,11 @@ export const hideLoader = () => ({
   payload: undefined,
 });
 
+export const countAttacks = (player) => ({
+  type: COUNT_ATTACK,
+  payload: player,
+});
+
 export const setRandom = (player, size = BOARD_SIZE) => async (dispatch) => {
   try {
     dispatch(showLoader());
@@ -58,3 +66,13 @@ export const setRandom = (player, size = BOARD_SIZE) => async (dispatch) => {
     throw new Error(error);
   }
 };
+
+export const getHit = (id, num, player) => ({
+  type: HIT_SHIP,
+  payload: { id, num, player },
+});
+
+export const missHit = (id, num, player) => ({
+  type: MISS_HIT,
+  payload: { id, num, player },
+});
