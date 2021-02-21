@@ -10,7 +10,11 @@ import { PLAYER1, PLAYER2 } from '~constants';
 export default function Game() {
   const loading = useSelector(({ game: { isLoading } }) => isLoading);
   return (
-    <Container fluid className="vh-100 d-flex justify-content-center align-items-center">
+    <Container
+      fluid
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: '100vh' }}
+    >
       <Row sm={12} xs={12} className="w-100">
         {
           loading

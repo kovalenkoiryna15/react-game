@@ -1,3 +1,11 @@
 .square .content.ship {
   background: green;
 }
+
+.ship.btn:disabled {
+  opacity: 1;
+}
+
+.square .content.ship.fired {
+  background: red;
+}
