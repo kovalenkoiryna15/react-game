@@ -39,7 +39,7 @@ export default function BCell({
 }
 
 BCell.propTypes = {
-  player: PropTypes.string.isRequired,
+  player: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   num: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([

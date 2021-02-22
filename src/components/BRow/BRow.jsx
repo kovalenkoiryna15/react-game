@@ -24,7 +24,7 @@ export default function BRow({ rowNum, cells, player }) {
 }
 
 BRow.propTypes = {
-  player: PropTypes.string.isRequired,
+  player: PropTypes.number.isRequired,
   rowNum: PropTypes.string.isRequired,
   cells: PropTypes.shape({
     id: PropTypes.bool,

@@ -14,9 +14,11 @@ import {
   HIT_SHIP,
   COUNT_ATTACK,
   MISS_HIT,
+  AUTO_ATTACK,
 } from './actions-constants';
 
 import randomizeShips from '~utils';
+import getRandomAttack from '~utils/auto-play';
 
 export const setRandomShipPositions = (
   player, rows,
@@ -76,3 +78,19 @@ export const missHit = (id, num, player) => ({
   type: MISS_HIT,
   payload: { id, num, player },
 });
+
+export const setRandomAttack = (player, num, id, value) => ({
+  type: AUTO_ATTACK,
+  payload: {
+    player, num, id, value,
+  },
+});
+
+export const randomPlay = (player, size, rows, attacks) => async (dispatch) => {
+  try {
+    const array = await getRandomAttack(size, rows, attacks);
+    array.forEach(({ num, id, value }) => dispatch(setRandomAttack(player, num, id, value)));
+  } catch (error) {
+    throw new Error(error);
+  }
+};

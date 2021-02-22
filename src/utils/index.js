@@ -74,7 +74,7 @@ function getRandomRow(size, checkedRows = []) {
       row = getRandomRow(size, checkedRows);
     }
   } else {
-    row = (getRandomInt(size) + 1);
+    row = getRandomInt(size) + 1;
   }
   return row;
 }

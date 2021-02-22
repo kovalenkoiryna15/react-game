@@ -29,7 +29,7 @@ export default function Options() {
           <Button onClick={onStart} disabled={loading}>Start</Button>
         </Col>
         {
-          playersIDs.map((player) => <Progress player={player} />)
+          playersIDs.map((player) => <Progress player={player} key={player} />)
         }
       </Row>
     </Col>

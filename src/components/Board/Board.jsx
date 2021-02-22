@@ -20,5 +20,5 @@ export default function Board({ player }) {
 }
 
 Board.propTypes = {
-  player: PropTypes.string.isRequired,
+  player: PropTypes.number.isRequired,
 };
