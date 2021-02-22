@@ -1,5 +1,7 @@
-export const PLAYER1 = 'Guardians of the Galaxy';
-export const PLAYER2 = 'Ronan\'s flagship';
+export const PLAYER1_NAME = 'Guardians of the Galaxy';
+export const PLAYER2_NAME = 'Ronan\'s flagship';
+export const PLAYER1 = 0;
+export const PLAYER2 = 1;
 export const BOARD_SIZE = 10;
 export const NUM_MINI_SHIPS = 4;
 export const NUM_SMALL_SHIPS = 3;

@@ -7,26 +7,41 @@ import {
   HIT_SHIP,
   COUNT_ATTACK,
   MISS_HIT,
+  AUTO_ATTACK,
 } from './actions-constants';
 import {
   PLAYER1,
   PLAYER2,
   HERE_IS_FIRE,
   HERE_IS_LOSER,
+  PLAYER1_NAME,
+  PLAYER2_NAME,
+  BOARD_SIZE,
 } from '~constants';
 
 const initialState = {
+  size: BOARD_SIZE,
+  players: [PLAYER1, PLAYER2],
   [PLAYER1]: {
     rows: {},
-    attacks: 0,
+    attacks: [],
+    attacksNum: 0,
+    turns: 1,
+    name: PLAYER1_NAME,
+    autoPlay: false,
+    autoPlayAttack: {},
   },
   [PLAYER2]: {
     rows: {},
-    attacks: 0,
+    attacks: [],
+    attacksNum: 0,
+    turns: 0,
+    name: PLAYER2_NAME,
+    autoPlay: true,
+    autoPlayAttack: {},
   },
   isLoading: false,
-  players: [PLAYER1, PLAYER2],
-  // activePlayer: PLAYER1,
+  activePlayer: PLAYER1,
   user: PLAYER1,
   error: undefined,
 };
@@ -45,7 +60,7 @@ const handlers = {
       ...state,
       [player]: {
         ...state[player],
-        attacks: state[player].attacks + 1,
+        attacksNum: state[player].attacksNum + 1,
       },
     };
   },
@@ -60,6 +75,7 @@ const handlers = {
           [id]: HERE_IS_FIRE,
         },
       },
+      attacks: [...state[player].attacks, { num, id, value: HERE_IS_FIRE }],
     },
   }),
   [MISS_HIT]: (state, { payload: { id, num, player } }) => ({
@@ -73,7 +89,32 @@ const handlers = {
           [id]: HERE_IS_LOSER,
         },
       },
+      attacks: [...state[player].attacks, { num, id, value: HERE_IS_LOSER }],
     },
+    [+!state.activePlayer]: {
+      ...state[+!state.activePlayer],
+      turns: state[+!state.activePlayer].turns + 1,
+    },
+    activePlayer: +!state.activePlayer,
+    attacksNum: 0,
+  }),
+  [AUTO_ATTACK]: (state, {
+    payload: {
+      player, num, id, value,
+    },
+  }) => ({
+    ...state,
+    [player]: {
+      ...state[player],
+      rows: {
+        ...state[player].rows,
+        [num]: {
+          ...state[player].rows[num],
+          [id]: value,
+        },
+      },
+    },
+    activePlayer: +!state.activePlayer,
   }),
   [GET_ROWS_SUCCESS]: (state, { payload: rows }) => ({
     ...state,

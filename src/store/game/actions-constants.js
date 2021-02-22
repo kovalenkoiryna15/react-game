@@ -6,3 +6,4 @@ export const SHOW_LOADER = 'GAME/SHOW_LOADER';
 export const HIT_SHIP = 'GAME/HIT_SHIP';
 export const MISS_HIT = 'GAME/MISS_HIT';
 export const COUNT_ATTACK = 'GAME/COUNT_ATTACK';
+export const AUTO_ATTACK = 'GAME/AUTO_ATTACK';
