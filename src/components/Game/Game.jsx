@@ -1,14 +1,34 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Board from '~components/Board';
 import Options from '~components/Options';
 
-import { PLAYER1, PLAYER2 } from '~constants';
+import { HERE_IS_FIRE } from '~constants';
+import { countAttacks, randomPlay } from '~store/game/actions';
 
 export default function Game() {
+  const dispatch = useDispatch();
+  const playersIDs = useSelector(({ game: { players } }) => players);
   const loading = useSelector(({ game: { isLoading } }) => isLoading);
+  const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
+  const enemy = +!whoseTurn;
+  const boardState = useSelector(({ game: { [enemy]: { rows } } }) => rows);
+  const boardSize = useSelector(({ game: { size } }) => size);
+  const lastAttacks = useSelector(({ game: { [whoseTurn]: { attacks } } }) => attacks);
+  const isAutoPlay = useSelector(({ game: { [whoseTurn]: { autoPlay } } }) => autoPlay);
+  const lastAttackValue = useSelector(
+    ({ game: { [whoseTurn]: { autoPlayLastAttackValue } } }) => autoPlayLastAttackValue,
+  );
+
+  useEffect(() => {
+    if (isAutoPlay && lastAttackValue === HERE_IS_FIRE) {
+      dispatch(randomPlay(enemy, boardSize, boardState, lastAttacks));
+    }
+  }, [isAutoPlay, lastAttackValue, whoseTurn, boardSize, boardState, lastAttacks, enemy, dispatch]);
+
   return (
     <Container
       fluid
@@ -23,8 +43,9 @@ export default function Game() {
             )
             : (
               <>
-                <Board player={PLAYER1} />
-                <Board player={PLAYER2} />
+                {
+                  playersIDs.map((player) => <Board player={player} key={player} />)
+                }
               </>
             )
         }

@@ -8,6 +8,8 @@ import {
   COUNT_ATTACK,
   MISS_HIT,
   AUTO_ATTACK,
+  RESET_ACTIVE_PLAYER,
+  RESET_PROGRESS,
 } from './actions-constants';
 import {
   PLAYER1,
@@ -26,19 +28,21 @@ const initialState = {
     rows: {},
     attacks: [],
     attacksNum: 0,
-    turns: 1,
     name: PLAYER1_NAME,
     autoPlay: false,
     autoPlayAttack: {},
+    autoPlayLastAttackValue: HERE_IS_LOSER,
+    progress: 100,
   },
   [PLAYER2]: {
     rows: {},
     attacks: [],
     attacksNum: 0,
-    turns: 0,
     name: PLAYER2_NAME,
     autoPlay: true,
     autoPlayAttack: {},
+    autoPlayLastAttackValue: HERE_IS_LOSER,
+    progress: 100,
   },
   isLoading: false,
   activePlayer: PLAYER1,
@@ -75,7 +79,10 @@ const handlers = {
           [id]: HERE_IS_FIRE,
         },
       },
-      attacks: [...state[player].attacks, { num, id, value: HERE_IS_FIRE }],
+    },
+    [state.activePlayer]: {
+      ...state[state.activePlayer],
+      attacks: [...state[state.activePlayer].attacks, { num, id, value: HERE_IS_LOSER }],
     },
   }),
   [MISS_HIT]: (state, { payload: { id, num, player } }) => ({
@@ -89,33 +96,43 @@ const handlers = {
           [id]: HERE_IS_LOSER,
         },
       },
-      attacks: [...state[player].attacks, { num, id, value: HERE_IS_LOSER }],
     },
-    [+!state.activePlayer]: {
-      ...state[+!state.activePlayer],
-      turns: state[+!state.activePlayer].turns + 1,
+    [state.activePlayer]: {
+      ...state[state.activePlayer],
+      attacks: [...state[state.activePlayer].attacks, { num, id, value: HERE_IS_LOSER }],
     },
     activePlayer: +!state.activePlayer,
-    attacksNum: 0,
   }),
   [AUTO_ATTACK]: (state, {
     payload: {
-      player, num, id, value,
+      enemy, num, id, value,
     },
-  }) => ({
-    ...state,
-    [player]: {
-      ...state[player],
-      rows: {
-        ...state[player].rows,
-        [num]: {
-          ...state[player].rows[num],
-          [id]: value,
+  }) => {
+    let newActivePlayer = enemy;
+    if (value === HERE_IS_FIRE) {
+      newActivePlayer = +!enemy;
+    }
+    return {
+      ...state,
+      [enemy]: {
+        ...state[enemy],
+        rows: {
+          ...state[enemy].rows,
+          [num]: {
+            ...state[enemy].rows[num],
+            [id]: value,
+          },
         },
       },
-    },
-    activePlayer: +!state.activePlayer,
-  }),
+      [+!enemy]: {
+        ...state[+!enemy],
+        autoPlayLastAttackValue: value,
+        attacks: [...state[+!enemy].attacks, { num, id, value }],
+        attacksNum: state[+!enemy].attacksNum + 1,
+      },
+      activePlayer: newActivePlayer,
+    };
+  },
   [GET_ROWS_SUCCESS]: (state, { payload: rows }) => ({
     ...state,
     rows,
@@ -131,6 +148,31 @@ const handlers = {
   [SHOW_LOADER]: (state) => ({
     ...state,
     isLoading: true,
+  }),
+  [RESET_ACTIVE_PLAYER]: (state) => ({
+    ...state,
+    activePlayer: PLAYER1,
+  }),
+  [RESET_PROGRESS]: (state) => ({
+    ...state,
+    [PLAYER1]: {
+      ...state[PLAYER1],
+      attacks: Array(0),
+      attacksNum: 0,
+      autoPlay: false,
+      autoPlayAttack: {},
+      autoPlayLastAttackValue: HERE_IS_LOSER,
+      progress: 100,
+    },
+    [PLAYER2]: {
+      ...state[PLAYER2],
+      attacks: Array(0),
+      attacksNum: 0,
+      autoPlay: true,
+      autoPlayAttack: {},
+      autoPlayLastAttackValue: HERE_IS_LOSER,
+      progress: 100,
+    },
   }),
   DEFAULT: (state) => state,
 };

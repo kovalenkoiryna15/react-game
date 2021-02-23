@@ -12,17 +12,17 @@ export default function See({
 }) {
   const classes = `content see ${value === HERE_IS_LOSER ? 'lose' : ''}`;
   const dispatch = useDispatch();
-  const enemy = +!player;
-  const boardState = useSelector(({ game: { [enemy]: { rows } } }) => rows);
-  const boardSize = useSelector(({ game: { size } }) => size);
-  const last4Attacks = useSelector(({ game: { [player]: { attacks } } }) => attacks);
-  const userBoard = useSelector(({ game: { user } }) => user);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
+  const enemy = +!whoseTurn;
+  const boardState = useSelector(({ game: { [whoseTurn]: { rows } } }) => rows);
+  const boardSize = useSelector(({ game: { size } }) => size);
+  const lastAttacks = useSelector(({ game: { [enemy]: { attacks } } }) => attacks);
+  const userBoard = useSelector(({ game: { user } }) => user);
 
   function onAttack() {
-    dispatch(countAttacks(player));
+    dispatch(countAttacks(whoseTurn));
     dispatch(missHit(id, num, player));
-    dispatch(randomPlay(enemy, boardSize, boardState, last4Attacks));
+    dispatch(randomPlay(whoseTurn, boardSize, boardState, lastAttacks));
   }
 
   return (

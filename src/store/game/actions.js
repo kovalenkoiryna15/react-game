@@ -15,6 +15,7 @@ import {
   COUNT_ATTACK,
   MISS_HIT,
   AUTO_ATTACK,
+  RESET_ACTIVE_PLAYER,
 } from './actions-constants';
 
 import randomizeShips from '~utils';
@@ -61,10 +62,6 @@ export const setRandom = (player, size = BOARD_SIZE) => async (dispatch) => {
     dispatch(setRandomShipPositions(player, rows));
     dispatch(hideLoader());
   } catch (error) {
-    dispatch(showLoader());
-    const rows = await randomizeShips(size);
-    dispatch(setRandomShipPositions(player, rows));
-    dispatch(hideLoader());
     throw new Error(error);
   }
 };
@@ -79,17 +76,32 @@ export const missHit = (id, num, player) => ({
   payload: { id, num, player },
 });
 
-export const setRandomAttack = (player, num, id, value) => ({
+export const setRandomAttack = (enemy, num, id, value) => ({
   type: AUTO_ATTACK,
   payload: {
-    player, num, id, value,
+    enemy, num, id, value,
   },
 });
 
-export const randomPlay = (player, size, rows, attacks) => async (dispatch) => {
+export const randomPlay = (enemy, size, rows, attacks) => async (dispatch) => {
   try {
-    const array = await getRandomAttack(size, rows, attacks);
-    array.forEach(({ num, id, value }) => dispatch(setRandomAttack(player, num, id, value)));
+    const { num, id, value } = await getRandomAttack(size, rows, attacks);
+    dispatch(setRandomAttack(enemy, num, id, value));
+  } catch (error) {
+    const { num, id, value } = await getRandomAttack(size, rows, attacks);
+    dispatch(setRandomAttack(enemy, num, id, value));
+    throw new Error(error);
+  }
+};
+
+export const resetActivePlayer = () => ({
+  type: RESET_ACTIVE_PLAYER,
+  payload: undefined,
+});
+
+export const resetGame = () => async (dispatch) => {
+  try {
+    dispatch(resetActivePlayer());
   } catch (error) {
     throw new Error(error);
   }
