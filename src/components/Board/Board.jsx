@@ -2,7 +2,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Col } from 'react-bootstrap';
-
 import BRow from '../BRow';
 
 export default function Board({ player }) {

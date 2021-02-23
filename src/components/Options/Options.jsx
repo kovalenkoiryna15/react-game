@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Button, Row } from 'react-bootstrap';
 
-import { setRandom } from '~store/game/actions';
+import { setRandom, resetGame } from '~store/game/actions';
 import {
   PLAYER1,
   PLAYER2,
@@ -16,7 +16,7 @@ export default function Options() {
   const playersIDs = useSelector(({ game: { players } }) => players);
 
   function onStart() {
-    // dispatch(resetGame()); // reset attacks and game progress
+    dispatch(resetGame()); // reset active player and game progress
     dispatch(setRandom(PLAYER1));
     dispatch(setRandom(PLAYER2));
   }
