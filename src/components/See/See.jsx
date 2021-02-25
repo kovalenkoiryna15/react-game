@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './See.scss';
 import { Button } from 'react-bootstrap';
 
-import { HERE_IS_LOSER } from '~constants';
+import { HERE_IS_LOSER, ATTACK_TIME } from '~constants';
 import { missHit, countAttacks, randomPlay } from '~store/game/actions';
 
 export default function See({
@@ -22,7 +22,10 @@ export default function See({
   function onAttack() {
     dispatch(countAttacks(whoseTurn));
     dispatch(missHit(id, num, player));
-    dispatch(randomPlay(whoseTurn, boardSize, boardState, lastAttacks));
+    const interval = setTimeout(
+      () => dispatch(randomPlay(whoseTurn, boardSize, boardState, lastAttacks)), ATTACK_TIME,
+    );
+    return () => clearInterval(interval);
   }
 
   return (

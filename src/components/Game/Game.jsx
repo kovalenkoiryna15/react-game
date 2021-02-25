@@ -6,8 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Board from '~components/Board';
 import Options from '~components/Options';
 
-import { HERE_IS_FIRE } from '~constants';
-import { countAttacks, randomPlay } from '~store/game/actions';
+import { HERE_IS_FIRE, ATTACK_TIME } from '~constants';
+import { randomPlay } from '~store/game/actions';
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -24,10 +24,14 @@ export default function Game() {
   );
 
   useEffect(() => {
+    let interval;
     if (isAutoPlay && lastAttackValue === HERE_IS_FIRE) {
-      dispatch(randomPlay(enemy, boardSize, boardState, lastAttacks));
+      interval = setTimeout(
+        () => dispatch(randomPlay(enemy, boardSize, boardState, lastAttacks)), ATTACK_TIME,
+      );
     }
-  }, [isAutoPlay, lastAttackValue, whoseTurn, boardSize, boardState, lastAttacks, enemy, dispatch]);
+    return () => clearInterval(interval);
+  }, [isAutoPlay, lastAttackValue, boardSize, boardState, lastAttacks, enemy, dispatch]);
 
   return (
     <Container
