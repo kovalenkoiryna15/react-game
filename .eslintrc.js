@@ -30,4 +30,7 @@ module.exports = {
       },
     },
   },
+  rules: {
+    treatUndefinedAsUnspecified: true,
+  },
 };
