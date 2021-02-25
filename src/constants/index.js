@@ -12,6 +12,7 @@ export const NUM_CELLS_SMALL_SHIPS = 2;
 export const NUM_CELLS_MEDIUM_SHIPS = 3;
 export const NUM_CELLS_BIG_SHIPS = 4;
 export const HERE_IS_SEE = 0;
+export const ATTACK_TIME = 3000;
 export const HERE_IS_BUFFER = 1;
 export const HERE_IS_SHIP = 2;
 export const HERE_IS_FIRE = 3;

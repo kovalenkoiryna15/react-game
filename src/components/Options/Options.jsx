@@ -22,11 +22,27 @@ export default function Options() {
   }
 
   return (
-    <Col md={2} sm={2} xs={12}>
+    <Col lg={2} md={12} sm={12} xs={12}>
       <Row>
-        <Col md={12} sm={12} xs={12}>
+        <Col lg={12} md={6} sm={12} xs={12}>
           <h4>Options</h4>
-          <Button onClick={onStart} disabled={loading}>Start</Button>
+          <Row>
+            <Col lg={12} md={6} sm={12} xs={12}>
+              <Button className="w-100" onClick={onStart} disabled={loading}>New Game</Button>
+            </Col>
+            <Col lg={12} md={6} sm={12} xs={12}>
+              <Button className="w-100" onClick={onStart} disabled={loading}>Auto play</Button>
+            </Col>
+            <Col lg={12} md={6} sm={12} xs={12}>
+              <Button className="w-100" onClick={onStart} disabled={loading}>Auto finish</Button>
+            </Col>
+            <Col lg={12} md={6} sm={12} xs={12}>
+              <Button className="w-100" onClick={onStart} disabled={loading}>Sound</Button>
+            </Col>
+            <Col lg={12} md={6} sm={12} xs={12}>
+              <Button className="w-100" onClick={onStart} disabled={loading}>Records</Button>
+            </Col>
+          </Row>
         </Col>
         {
           playersIDs.map((player) => <Progress player={player} key={player} />)
