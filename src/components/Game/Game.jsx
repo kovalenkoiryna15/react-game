@@ -7,7 +7,7 @@ import Board from '~components/Board';
 import Options from '~components/Options';
 
 import { HERE_IS_FIRE, ATTACK_TIME } from '~constants';
-import { randomPlay } from '~store/game/actions';
+import { randomPlay, saveLocal } from '~store/game/actions';
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -15,7 +15,8 @@ export default function Game() {
   const loading = useSelector(({ game: { isLoading } }) => isLoading);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
   const enemy = +!whoseTurn;
-  const boardState = useSelector(({ game: { [enemy]: { rows } } }) => rows);
+  const enemyBoardState = useSelector(({ game: { [enemy]: { rows } } }) => rows);
+  const whoseTurnBoardState = useSelector(({ game: { [whoseTurn]: { rows } } }) => rows);
   const boardSize = useSelector(({ game: { size } }) => size);
   const lastAttacks = useSelector(({ game: { [whoseTurn]: { attacks } } }) => attacks);
   const isAutoPlay = useSelector(({ game: { [whoseTurn]: { autoPlay } } }) => autoPlay);
@@ -24,14 +25,23 @@ export default function Game() {
   );
 
   useEffect(() => {
-    let interval;
+    playersIDs.forEach((player) => {
+      if (player === whoseTurn) {
+        dispatch(saveLocal(whoseTurnBoardState, player))
+      }
+      if (player === enemy) {
+        dispatch(saveLocal(enemyBoardState, player))
+      }
+    });
     if (isAutoPlay && lastAttackValue === HERE_IS_FIRE) {
-      interval = setTimeout(
-        () => dispatch(randomPlay(enemy, boardSize, boardState, lastAttacks)), ATTACK_TIME,
+      const interval = setTimeout(
+        () => dispatch(randomPlay(enemy, boardSize, enemyBoardState, lastAttacks)), ATTACK_TIME,
       );
+      return () => clearInterval(interval);
     }
-    return () => clearInterval(interval);
-  }, [isAutoPlay, lastAttackValue, boardSize, boardState, lastAttacks, enemy, dispatch]);
+  }, [
+    playersIDs, isAutoPlay, lastAttackValue, boardSize, enemyBoardState, lastAttacks, enemy, dispatch,
+  ]);
 
   return (
     <Container
@@ -40,6 +50,7 @@ export default function Game() {
       style={{ minHeight: '100vh' }}
     >
       <Row sm={12} xs={12} className="w-100">
+        <Options />
         {
           loading
             ? (
@@ -53,7 +64,6 @@ export default function Game() {
               </>
             )
         }
-        <Options />
       </Row>
     </Container>
   );

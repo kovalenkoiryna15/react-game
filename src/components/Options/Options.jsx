@@ -3,12 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Col, Button, Row } from 'react-bootstrap';
 
 import { setRandom, resetGame } from '~store/game/actions';
-import {
-  PLAYER1,
-  PLAYER2,
-} from '~constants';
-
-import Progress from '~components/Progress';
 
 export default function Options() {
   const dispatch = useDispatch();
@@ -17,8 +11,7 @@ export default function Options() {
 
   function onStart() {
     dispatch(resetGame()); // reset active player and game progress
-    dispatch(setRandom(PLAYER1));
-    dispatch(setRandom(PLAYER2));
+    playersIDs.forEach((player) => dispatch(setRandom(player)));
   }
 
   return (
@@ -29,6 +22,9 @@ export default function Options() {
           <Row>
             <Col lg={12} md={6} sm={12} xs={12}>
               <Button className="w-100" onClick={onStart} disabled={loading}>New Game</Button>
+            </Col>
+            <Col lg={12} md={6} sm={12} xs={12}>
+              <Button className="w-100" onClick={onStart} disabled={loading}>Continue Game</Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
               <Button className="w-100" onClick={onStart} disabled={loading}>Auto play</Button>
@@ -44,9 +40,6 @@ export default function Options() {
             </Col>
           </Row>
         </Col>
-        {
-          playersIDs.map((player) => <Progress player={player} key={player} />)
-        }
       </Row>
     </Col>
   );
