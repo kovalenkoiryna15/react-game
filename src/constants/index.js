@@ -20,3 +20,4 @@ export const HERE_IS_LOSER = 4;
 export const upperCaseAlp = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 export const VERTICAL = 'vertical';
 export const HORIZONTAL = 'horizontal';
+export const GAME_STORAGE_KEY = 'battleship';

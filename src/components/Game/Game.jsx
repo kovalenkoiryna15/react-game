@@ -6,41 +6,65 @@ import { useSelector, useDispatch } from 'react-redux';
 import Board from '~components/Board';
 import Options from '~components/Options';
 
-import { HERE_IS_FIRE, ATTACK_TIME } from '~constants';
-import { randomPlay, saveLocal } from '~store/game/actions';
+import {
+  HERE_IS_FIRE, ATTACK_TIME, HERE_IS_LOSER,
+} from '~constants';
+import { randomPlay, writeLocal } from '~store/game/actions';
 
 export default function Game() {
   const dispatch = useDispatch();
+  const gameStorageKey = useSelector(({ game: { storageKey } }) => storageKey);
   const playersIDs = useSelector(({ game: { players } }) => players);
   const loading = useSelector(({ game: { isLoading } }) => isLoading);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
   const enemy = +!whoseTurn;
   const enemyBoardState = useSelector(({ game: { [enemy]: { rows } } }) => rows);
+  const enemyState = useSelector(({ game: { [enemy]: state } }) => state);
   const whoseTurnBoardState = useSelector(({ game: { [whoseTurn]: { rows } } }) => rows);
+  const whoseTurnState = useSelector(({ game: { [whoseTurn]: state } }) => state);
   const boardSize = useSelector(({ game: { size } }) => size);
   const lastAttacks = useSelector(({ game: { [whoseTurn]: { attacks } } }) => attacks);
   const isAutoPlay = useSelector(({ game: { [whoseTurn]: { autoPlay } } }) => autoPlay);
-  const lastAttackValue = useSelector(
-    ({ game: { [whoseTurn]: { autoPlayLastAttackValue } } }) => autoPlayLastAttackValue,
+  const lastWhoseTurnAttackV = useSelector(
+    ({ game: { [whoseTurn]: { lastAttackValue } } }) => lastAttackValue,
+  );
+  const lastEnemyAttackV = useSelector(
+    ({ game: { [enemy]: { lastAttackValue } } }) => lastAttackValue,
   );
 
   useEffect(() => {
+    dispatch(writeLocal({ size: boardSize, activePlayer: whoseTurn }, gameStorageKey));
     playersIDs.forEach((player) => {
       if (player === whoseTurn) {
-        dispatch(saveLocal(whoseTurnBoardState, player))
+        dispatch(writeLocal(whoseTurnState, player));
       }
       if (player === enemy) {
-        dispatch(saveLocal(enemyBoardState, player))
+        dispatch(writeLocal(enemyState, player));
       }
     });
-    if (isAutoPlay && lastAttackValue === HERE_IS_FIRE) {
+    if ((isAutoPlay && lastWhoseTurnAttackV === HERE_IS_FIRE)
+        || (isAutoPlay && lastEnemyAttackV === HERE_IS_LOSER)) {
       const interval = setTimeout(
         () => dispatch(randomPlay(enemy, boardSize, enemyBoardState, lastAttacks)), ATTACK_TIME,
       );
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [
-    playersIDs, isAutoPlay, lastAttackValue, boardSize, enemyBoardState, lastAttacks, enemy, dispatch,
+    playersIDs,
+    isAutoPlay,
+    lastWhoseTurnAttackV,
+    lastEnemyAttackV,
+    boardSize,
+    enemyBoardState,
+    enemyState,
+    lastAttacks,
+    enemy,
+    whoseTurn,
+    whoseTurnBoardState,
+    whoseTurnState,
+    gameStorageKey,
+    dispatch,
   ]);
 
   return (

@@ -1,20 +1,10 @@
-export const saveLocal = (newState, player) => {
-  localStorage.removeItem(`${player}`);
-  const board = [];
-  board.push(newState);
-  localStorage.setItem(`${player}`, JSON.stringify(board));
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const textResponse = JSON.stringify({ board: newState });
-      const myBody = new Blob([textResponse]);
-      const myResponse = new Response(myBody);
-      resolve(myResponse);
-    }, 0);
-  });
+export const setLocal = (state, id) => {
+  localStorage.removeItem(`${id}-battleship`);
+  localStorage.setItem(`${id}-battleship`, JSON.stringify(state));
 };
 
-export const getLocal = (player) => {
-  const localState = localStorage.getItem(`${player}`);
+export const getLocal = (id) => {
+  const localState = localStorage.getItem(`${id}-battleship`);
   if (!localState) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -25,7 +15,7 @@ export const getLocal = (player) => {
   const data = JSON.parse(localState);
   return new Promise((resolve) => {
     setTimeout(() => {
-      const textResponse = JSON.stringify({ board: data });
+      const textResponse = JSON.stringify({ game: { [id]: data } });
       const myBody = new Blob([textResponse]);
       const myResponse = new Response(myBody);
       resolve(myResponse);
