@@ -3,12 +3,12 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import store from '~store';
-import Game from '~components/Game';
+import App from '~components/App';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Game />
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
@@ -17,7 +17,7 @@ ReactDOM.render(
 // eslint-disable-next-line react/no-render-return-value
 const renderApp = () => ReactDOM.render(
   <Provider store={store}>
-    <Game />
+    <App />
   </Provider>,
   document.getElementById('root'),
 );

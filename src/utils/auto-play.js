@@ -119,11 +119,9 @@ export default function getRandomAttack(size, rows, attacks) {
   let nextAttack;
   if (attacks.length) {
     const prevHit = checkForHit(attacks);
-    console.log(prevHit);
     if (prevHit) {
       const formattedRows = formateRows(rows, size);
       const noAttacked = checkForSee(prevHit, formattedRows, cols);
-      console.log(noAttacked);
       if (!noAttacked.length) {
         nextAttack = getRandomPosition(noAttackedCells, size);
       } else {
@@ -145,6 +143,5 @@ export default function getRandomAttack(size, rows, attacks) {
   } else {
     nextAttack = getRandomPosition(noAttackedCells, size);
   }
-  console.log(nextAttack);
   return nextAttack;
 }

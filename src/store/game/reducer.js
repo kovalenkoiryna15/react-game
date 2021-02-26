@@ -1,6 +1,4 @@
 import {
-  GET_ROWS_SUCCESS,
-  GET_ROWS_FAILURE,
   HIDE_LOADER,
   SHOW_LOADER,
   SET_RANDOM_SHIP_POSITIONS,
@@ -10,6 +8,9 @@ import {
   AUTO_ATTACK,
   RESET_ACTIVE_PLAYER,
   RESET_PROGRESS,
+  ALERT_MESSAGE,
+  SET_PLAYER_STATE,
+  SET_GAME_STATE,
 } from './actions-constants';
 import {
   PLAYER1,
@@ -19,6 +20,7 @@ import {
   PLAYER1_NAME,
   PLAYER2_NAME,
   BOARD_SIZE,
+  GAME_STORAGE_KEY,
 } from '~constants';
 
 const initialState = {
@@ -31,7 +33,7 @@ const initialState = {
     name: PLAYER1_NAME,
     autoPlay: false,
     autoPlayAttack: {},
-    autoPlayLastAttackValue: HERE_IS_LOSER,
+    lastAttackValue: HERE_IS_LOSER,
     progress: 100,
   },
   [PLAYER2]: {
@@ -41,13 +43,14 @@ const initialState = {
     name: PLAYER2_NAME,
     autoPlay: true,
     autoPlayAttack: {},
-    autoPlayLastAttackValue: HERE_IS_LOSER,
+    lastAttackValue: HERE_IS_LOSER,
     progress: 100,
   },
   isLoading: false,
   activePlayer: PLAYER1,
   user: PLAYER1,
-  error: undefined,
+  alert: undefined,
+  storageKey: GAME_STORAGE_KEY,
 };
 
 const handlers = {
@@ -126,20 +129,16 @@ const handlers = {
       },
       [+!enemy]: {
         ...state[+!enemy],
-        autoPlayLastAttackValue: value,
+        lastAttackValue: value,
         attacks: [...state[+!enemy].attacks, { num, id, value }],
         attacksNum: state[+!enemy].attacksNum + 1,
       },
       activePlayer: newActivePlayer,
     };
   },
-  [GET_ROWS_SUCCESS]: (state, { payload: rows }) => ({
+  [ALERT_MESSAGE]: (state, { payload }) => ({
     ...state,
-    rows,
-  }),
-  [GET_ROWS_FAILURE]: (state, { payload: error }) => ({
-    ...state,
-    error,
+    alert: payload,
   }),
   [HIDE_LOADER]: (state) => ({
     ...state,
@@ -161,7 +160,7 @@ const handlers = {
       attacksNum: 0,
       autoPlay: false,
       autoPlayAttack: {},
-      autoPlayLastAttackValue: HERE_IS_LOSER,
+      lastAttackValue: HERE_IS_LOSER,
       progress: 100,
     },
     [PLAYER2]: {
@@ -170,8 +169,19 @@ const handlers = {
       attacksNum: 0,
       autoPlay: true,
       autoPlayAttack: {},
-      autoPlayLastAttackValue: HERE_IS_LOSER,
+      lastAttackValue: HERE_IS_LOSER,
       progress: 100,
+    },
+  }),
+  [SET_GAME_STATE]: (state, { payload }) => ({
+    ...state,
+    ...payload,
+  }),
+  [SET_PLAYER_STATE]: (state, { payload: { player, newState } }) => ({
+    ...state,
+    [player]: {
+      ...state.player,
+      ...newState,
     },
   }),
   DEFAULT: (state) => state,

@@ -1,13 +1,7 @@
-// import { database } from '../src/firebase';
-
 import {
-  // PLAYER1,
-  // PLAYER2,
   BOARD_SIZE,
 } from '~constants';
 import {
-  GET_ROWS_SUCCESS,
-  GET_ROWS_FAILURE,
   HIDE_LOADER,
   SHOW_LOADER,
   SET_RANDOM_SHIP_POSITIONS,
@@ -16,9 +10,17 @@ import {
   MISS_HIT,
   AUTO_ATTACK,
   RESET_ACTIVE_PLAYER,
+  WRITE_SUCCESS,
+  WRITE_FAILURE,
+  READ_SUCCESS,
+  READ_FAILURE,
+  ALERT_MESSAGE,
+  SET_PLAYER_STATE,
+  SET_GAME_STATE,
 } from './actions-constants';
 
 import randomizeShips from '~utils';
+import { setLocal, getLocal } from '~utils/localStorage-helpers';
 import getRandomAttack from '~utils/auto-play';
 
 export const setRandomShipPositions = (
@@ -26,18 +28,6 @@ export const setRandomShipPositions = (
 ) => ({
   type: SET_RANDOM_SHIP_POSITIONS,
   payload: { player, rows },
-});
-
-export const getRowsSuccess = (
-  board,
-) => ({
-  type: GET_ROWS_SUCCESS,
-  payload: board,
-});
-
-export const getRowsFailure = (error) => ({
-  type: GET_ROWS_FAILURE,
-  payload: error,
 });
 
 export const showLoader = () => ({
@@ -88,8 +78,6 @@ export const randomPlay = (enemy, size, rows, attacks) => async (dispatch) => {
     const { num, id, value } = await getRandomAttack(size, rows, attacks);
     dispatch(setRandomAttack(enemy, num, id, value));
   } catch (error) {
-    const { num, id, value } = await getRandomAttack(size, rows, attacks);
-    dispatch(setRandomAttack(enemy, num, id, value));
     throw new Error(error);
   }
 };
@@ -104,5 +92,73 @@ export const resetGame = () => async (dispatch) => {
     dispatch(resetActivePlayer());
   } catch (error) {
     throw new Error(error);
+  }
+};
+
+export const writeSuccess = () => ({
+  type: WRITE_SUCCESS,
+  payload: undefined,
+});
+
+export const writeFailure = () => ({
+  type: WRITE_FAILURE,
+  payload: undefined,
+});
+
+export const readSuccess = () => ({
+  type: READ_SUCCESS,
+  payload: undefined,
+});
+
+export const readFailure = () => ({
+  type: READ_FAILURE,
+  payload: undefined,
+});
+
+export const alertError = (message) => ({
+  type: ALERT_MESSAGE,
+  payload: message,
+});
+
+export const writeLocal = (state, id) => async (dispatch) => {
+  try {
+    await setLocal(state, id);
+    dispatch(writeSuccess());
+  } catch {
+    dispatch(writeFailure());
+  }
+};
+
+export const setPlayerState = (player, newState) => ({
+  type: SET_PLAYER_STATE,
+  payload: { player, newState },
+});
+
+export const readLocalPlayerState = (player) => async (dispatch) => {
+  try {
+    const response = await getLocal(player);
+    const { game } = await response.json();
+    dispatch(setPlayerState(player, game[player]));
+    dispatch(readSuccess());
+  } catch (error) {
+    dispatch(readFailure());
+    dispatch(alertError(error.toString()));
+  }
+};
+
+export const setGameState = (state) => ({
+  type: SET_GAME_STATE,
+  payload: state,
+});
+
+export const readLocalGameState = (key) => async (dispatch) => {
+  try {
+    const response = await getLocal(key);
+    const { game } = await response.json();
+    dispatch(setGameState(game[key]));
+    dispatch(readSuccess());
+  } catch (error) {
+    dispatch(readFailure());
+    dispatch(alertError(error.toString()));
   }
 };
