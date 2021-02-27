@@ -7,12 +7,20 @@ import './WelcomeModal.scss';
 import bg1 from '~images/wp1814937.jpg';
 
 import Footer from '~components/Footer';
+import SoundOnSVG from '~components/Sound/SoundOnSVG';
+import SoundOffSVG from '~components/Sound/SoundOffSVG';
+import RecordsSVG from '~components/RecordsSVG';
+import NewGameSVG from '~components/NewGameSVG';
 
-import { setRandom, resetGame, resetIsPlaying } from '~store/game/actions';
+import {
+  setRandom, resetGame, resetIsPlaying, resetSound, toggleRecordsModal,
+} from '~store/game/actions';
 
 export default function WelcomeModal() {
   const dispatch = useDispatch();
+  const isSoundOn = useSelector(({ game: { isSound } }) => isSound);
   const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
+  const isVisible = useSelector(({ game: { isRecordsVisible } }) => isRecordsVisible);
   const loading = useSelector(({ game: { isLoading } }) => isLoading);
   const playersIDs = useSelector(({ game: { players } }) => players);
 
@@ -24,6 +32,14 @@ export default function WelcomeModal() {
 
   function onContinue() {
     dispatch(resetIsPlaying());
+  }
+
+  function onSoundReset() {
+    dispatch(resetSound());
+  }
+
+  function onRecords() {
+    dispatch(toggleRecordsModal());
   }
 
   return (
@@ -50,16 +66,27 @@ export default function WelcomeModal() {
                 <Col lg={12} md={12} sm={12} xs={12}>
                   <Row>
                     <Col lg={12} md={12} sm={12} xs={12}>
-                      <Button className="w-100 options" onClick={onStart} disabled={loading}>New Game</Button>
+                      <Button className="w-100 options btn-svg" onClick={onStart} disabled={loading}>
+                        <span>New Game</span>
+                        <NewGameSVG />
+                      </Button>
                     </Col>
                     <Col lg={12} md={12} sm={12} xs={12}>
                       <Button className="w-100 options" onClick={onContinue} disabled={loading}>Continue Game</Button>
                     </Col>
                     <Col lg={12} md={12} sm={12} xs={12}>
-                      <Button className="w-100 options" onClick={onStart} disabled={loading}>Sound</Button>
+                      <Button className="w-100 options btn-svg" onClick={onRecords} disabled={loading}>
+                        <span>Records</span>
+                        <RecordsSVG />
+                      </Button>
                     </Col>
                     <Col lg={12} md={12} sm={12} xs={12}>
-                      <Button className="w-100 options" onClick={onStart} disabled={loading}>Records</Button>
+                      <Button className="w-100 options btn-svg" onClick={onSoundReset} disabled={loading}>
+                        <span>Sound</span>
+                        {
+                          isSoundOn ? <SoundOnSVG /> : <SoundOffSVG />
+                        }
+                      </Button>
                     </Col>
                   </Row>
                 </Col>
