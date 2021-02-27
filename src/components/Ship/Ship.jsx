@@ -7,13 +7,15 @@ import { Button } from 'react-bootstrap';
 import { HERE_IS_FIRE } from '~constants';
 import { getHit, countAttacks } from '~store/game/actions';
 
+import ShipSVG from './svg';
+
 export default function Ship({
   id, num, player, value,
 }) {
-  const classes = `content ship ${value === HERE_IS_FIRE ? 'fired' : ''}`;
   const dispatch = useDispatch();
   const userBoard = useSelector(({ game: { user } }) => user);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
+  const classes = `content ship ${value === HERE_IS_FIRE ? 'fired' : ''}`;
 
   function onAttack() {
     dispatch(countAttacks(player));
@@ -26,7 +28,7 @@ export default function Ship({
       disabled={userBoard === player || value === HERE_IS_FIRE || userBoard !== whoseTurn}
       onClick={onAttack}
     >
-      {`${num}${id}`}
+      <ShipSVG userBoard={userBoard} player={player} value={value} />
     </Button>
   );
 }
