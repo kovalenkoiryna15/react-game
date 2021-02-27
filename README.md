@@ -5,14 +5,11 @@
 - [x] [webpack](https://webpack.js.org/)
 - [x] [React](https://reactjs.org/) + [Redux](https://redux.js.org/) +
       [Thunk](https://github.com/reduxjs/redux-thunk)
-- [x] [Jest](https://jestjs.io/)
-      (+ [React Testing Library](https://testing-library.com/docs/reac-testing-library/intro/))
 - [x] [Bootstrap](https://getbootstrap.com/) (+ [Bootswatch](https://bootswatch.com/))
 - [x] [sass](https://sass-lang.com/)
 - [x] [ESLint](https://eslint.org/), [Stylelint](https://stylelint.io/),
       [Prettier](https://prettier.io/), [EditorConfig](https://editorconfig.org/)
 - [x] [TravisCI](https://travis-ci.org/)
-- [x] [firebase realtime database](https://firebase.google.com/)
 
 ## Требования к оформлению приложения
 

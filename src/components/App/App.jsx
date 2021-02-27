@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Game from '~components/Game';
+import WelcomeModal from '~components/WelcomeModal';
 import { readLocalPlayerState, readLocalGameState } from '~store/game/actions';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
   return (
     <>
       <Game />
+      <WelcomeModal />
     </>
   );
 }

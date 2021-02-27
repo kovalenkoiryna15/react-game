@@ -11,20 +11,6 @@ const ShipSVG = ({
   if (userBoard !== player) {
     classes = `ship-svg ${value !== HERE_IS_FIRE ? 'hidden' : 'visible fired'}`;
   }
-  // var tl = new TimelineMax({onComplete:this.setBtnEnabled, onCompleteParams:[true]})
-  // .timeScale(1.8);
-  //  tl.staggerTo('.radialGroup g', 1, {
-  //   fill:(this.state.open) ? '#41E969' : '#F70048'
-  //  },0.2)
-  // .to('.bar', 0.4, {
-  //   strokeWidth:(this.state.open) ? 0 : 4,
-  //   transformOrigin:'50% 50%',
-  //  stroke:(this.state.open) ? '#41E969' : '#F70048',
-  //   ease:Sine.easeOut
-  // },0)
-  // .to( '.ring', 0.4, {
-  //  stroke:(this.state.open) ? '#41E969' : '#F70048'
-  // },0)
 
   return (
     <svg className={classes} viewBox="200 150 400 300" preserveAspectRatio="xMidYMid meet">

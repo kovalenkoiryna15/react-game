@@ -11,6 +11,7 @@ import {
   ALERT_MESSAGE,
   SET_PLAYER_STATE,
   SET_GAME_STATE,
+  RESET_IS_PLAYING,
 } from './actions-constants';
 import {
   PLAYER1,
@@ -47,6 +48,7 @@ const initialState = {
     progress: 100,
   },
   isLoading: false,
+  isPlaying: false,
   activePlayer: PLAYER1,
   user: PLAYER1,
   alert: undefined,
@@ -147,6 +149,10 @@ const handlers = {
   [SHOW_LOADER]: (state) => ({
     ...state,
     isLoading: true,
+  }),
+  [RESET_IS_PLAYING]: (state) => ({
+    ...state,
+    isPlaying: true,
   }),
   [RESET_ACTIVE_PLAYER]: (state) => ({
     ...state,
