@@ -1,5 +1,6 @@
 .square .content.ship {
-  background: green;
+  background: rgba(0, 0, 0, 1);
+  overflow: hidden;
 }
 
 .ship.btn:disabled {
@@ -7,5 +8,5 @@
 }
 
 .square .content.ship.fired {
-  background: red;
+  background: rgba(0, 0, 0, 0.7);
 }

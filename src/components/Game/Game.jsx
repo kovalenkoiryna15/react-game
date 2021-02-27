@@ -11,6 +11,8 @@ import {
 } from '~constants';
 import { randomPlay, writeLocal } from '~store/game/actions';
 
+import bg1 from '~images/wp1814937.jpg';
+
 export default function Game() {
   const dispatch = useDispatch();
   const gameStorageKey = useSelector(({ game: { storageKey } }) => storageKey);
@@ -71,7 +73,10 @@ export default function Game() {
     <Container
       fluid
       className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: '100vh' }}
+      style={{
+        minHeight: '100vh',
+        background: `url(${bg1})`,
+      }}
     >
       <Row sm={12} xs={12} className="w-100">
         <Options />

@@ -33,9 +33,7 @@ export default function See({
       className={classes}
       disabled={userBoard === player || value === HERE_IS_LOSER || userBoard !== whoseTurn}
       onClick={onAttack}
-    >
-      {`${num}${id}`}
-    </Button>
+    />
   );
 }
 
