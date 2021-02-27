@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Board from '~components/Board';
 import Options from '~components/Options';
+import Footer from '~components/Footer';
 
 import {
   HERE_IS_FIRE, ATTACK_TIME, HERE_IS_LOSER,
@@ -72,7 +73,7 @@ export default function Game() {
   return (
     <Container
       fluid
-      className="d-flex justify-content-center align-items-center"
+      className="d-flex flex-column justify-content-center align-items-center"
       style={{
         minHeight: '100vh',
         background: `url(${bg1})`,
@@ -94,6 +95,7 @@ export default function Game() {
             )
         }
       </Row>
+      <Footer />
     </Container>
   );
 }
