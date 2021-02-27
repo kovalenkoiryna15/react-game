@@ -18,6 +18,30 @@ body {
   color: #ed044b;
 }
 
+@mixin tablet {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin media-l-mobile {
+  @media (max-width: 425px) {
+    @content;
+  }
+}
+
+@mixin media-m-mobile {
+  @media (max-width: 375px) {
+    @content;
+  }
+}
+
+@mixin media-s-mobile {
+  @media (max-width: 320px) {
+    @content;
+  }
+}
+
 // Bootstrap
 @import "~bootswatch/dist/sketchy/variables";
 @import "~bootstrap/scss/bootstrap";

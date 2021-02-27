@@ -1,0 +1,39 @@
+.modal.welcome-modal {
+  color: #ed044b;
+  min-width: 100vw;
+  min-height: 100vh;
+
+  & .modal-dialog {
+    min-width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    background-color: transparent;
+
+    & .modal-content {
+      min-width: 100vw;
+      min-height: 100vh;
+      border-radius: none;
+      border: none;
+      background-color: transparent;
+
+      & .modal-body {
+        min-width: 100%;
+        min-height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & .modal-container {
+          padding: 0.5rem;
+          background-color: rgba(51, 51, 51, 0.4);
+        }
+      }
+    }
+
+    & .modal-footer {
+      border-radius: none;
+      border: none;
+      background-color: transparent;
+    }
+  }
+}

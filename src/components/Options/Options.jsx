@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Button, Row } from 'react-bootstrap';
+import './Options.scss';
 
 import { setRandom, resetGame } from '~store/game/actions';
 
@@ -21,22 +22,22 @@ export default function Options() {
           <h4>Options</h4>
           <Row>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100" onClick={onStart} disabled={loading}>New Game</Button>
+              <Button className="w-100 options" onClick={onStart} disabled={loading}>New Game</Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100" onClick={onStart} disabled={loading}>Continue Game</Button>
+              <Button className="w-100 options" onClick={onStart} disabled={loading}>Continue Game</Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100" onClick={onStart} disabled={loading}>Auto play</Button>
+              <Button className="w-100 options" onClick={onStart} disabled={loading}>Auto play</Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100" onClick={onStart} disabled={loading}>Auto finish</Button>
+              <Button className="w-100 options" onClick={onStart} disabled={loading}>Auto finish</Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100" onClick={onStart} disabled={loading}>Sound</Button>
+              <Button className="w-100 options" onClick={onStart} disabled={loading}>Sound</Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100" onClick={onStart} disabled={loading}>Records</Button>
+              <Button className="w-100 options" onClick={onStart} disabled={loading}>Records</Button>
             </Col>
           </Row>
         </Col>

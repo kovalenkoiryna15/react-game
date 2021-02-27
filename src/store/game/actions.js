@@ -17,6 +17,7 @@ import {
   ALERT_MESSAGE,
   SET_PLAYER_STATE,
   SET_GAME_STATE,
+  RESET_IS_PLAYING,
 } from './actions-constants';
 
 import randomizeShips from '~utils';
@@ -28,6 +29,11 @@ export const setRandomShipPositions = (
 ) => ({
   type: SET_RANDOM_SHIP_POSITIONS,
   payload: { player, rows },
+});
+
+export const resetIsPlaying = () => ({
+  type: RESET_IS_PLAYING,
+  payload: undefined,
 });
 
 export const showLoader = () => ({
