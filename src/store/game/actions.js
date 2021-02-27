@@ -18,6 +18,9 @@ import {
   SET_PLAYER_STATE,
   SET_GAME_STATE,
   RESET_IS_PLAYING,
+  RESET_SOUND,
+  TOGGLE_RECORDS_MODAL,
+  TOGGLE_FINISH_MODAL,
 } from './actions-constants';
 
 import randomizeShips from '~utils';
@@ -29,6 +32,21 @@ export const setRandomShipPositions = (
 ) => ({
   type: SET_RANDOM_SHIP_POSITIONS,
   payload: { player, rows },
+});
+
+export const resetSound = () => ({
+  type: RESET_SOUND,
+  payload: undefined,
+});
+
+export const toggleRecordsModal = () => ({
+  type: TOGGLE_RECORDS_MODAL,
+  payload: undefined,
+});
+
+export const toggleFinishModal = () => ({
+  type: TOGGLE_FINISH_MODAL,
+  payload: undefined,
 });
 
 export const resetIsPlaying = () => ({

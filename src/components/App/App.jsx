@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Game from '~components/Game';
 import WelcomeModal from '~components/WelcomeModal';
 import { readLocalPlayerState, readLocalGameState } from '~store/game/actions';
+import RecordsModal from '~components/RecordsModal';
+import FinishModal from '~components/FinishModal';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -16,6 +18,8 @@ export default function App() {
     <>
       <Game />
       <WelcomeModal />
+      <RecordsModal />
+      <FinishModal />
     </>
   );
 }

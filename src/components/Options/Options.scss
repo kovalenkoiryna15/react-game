@@ -1,3 +1,13 @@
 .btn.btn-primary.options {
   margin: 0.5rem 0;
+
+  &.btn-svg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  & svg.ionicon {
+    width: 25%;
+  }
 }

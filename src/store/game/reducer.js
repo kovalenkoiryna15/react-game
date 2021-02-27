@@ -12,6 +12,9 @@ import {
   SET_PLAYER_STATE,
   SET_GAME_STATE,
   RESET_IS_PLAYING,
+  RESET_SOUND,
+  TOGGLE_RECORDS_MODAL,
+  TOGGLE_FINISH_MODAL,
 } from './actions-constants';
 import {
   PLAYER1,
@@ -53,6 +56,9 @@ const initialState = {
   user: PLAYER1,
   alert: undefined,
   storageKey: GAME_STORAGE_KEY,
+  isSound: true,
+  isRecordsVisible: false,
+  isFinishVisible: false,
 };
 
 const handlers = {
@@ -153,6 +159,18 @@ const handlers = {
   [RESET_IS_PLAYING]: (state) => ({
     ...state,
     isPlaying: true,
+  }),
+  [RESET_SOUND]: (state) => ({
+    ...state,
+    isSound: !state.isSound,
+  }),
+  [TOGGLE_RECORDS_MODAL]: (state) => ({
+    ...state,
+    isRecordsVisible: !state.isRecordsVisible,
+  }),
+  [TOGGLE_FINISH_MODAL]: (state) => ({
+    ...state,
+    isFinishVisible: !state.isFinishVisible,
   }),
   [RESET_ACTIVE_PLAYER]: (state) => ({
     ...state,
