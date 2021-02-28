@@ -8,15 +8,17 @@ export default function Progress({ player }) {
   const attacksCount = useSelector(({ game: { [player]: { attacksNum } } }) => attacksNum);
   const playerName = useSelector(({ game: { [player]: { name } } }) => name);
   const playerProgress = useSelector(({ game: { [player]: { progress } } }) => progress);
+  const firedShipsNum = useSelector(({ game: { [player]: { firedShips } } }) => firedShips);
 
   return (
     <Row>
       <Col sm={12} xs={12}>
         <h4>{playerName}</h4>
         <Row>
-          <Col sm={4} xs={12}>
+          <Col sm={6} xs={12}>
             <ProgressBar now={playerProgress} />
-            <h5>{attacksCount}</h5>
+            <span className="px-1">{`Attacks: ${attacksCount}`}</span>
+            <span className="px-1">{`Fired: ${firedShipsNum}`}</span>
           </Col>
         </Row>
       </Col>

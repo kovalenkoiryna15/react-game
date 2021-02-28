@@ -43,6 +43,7 @@ const initialState = {
     lastAttackValue: c.HERE_IS_LOSER,
     progress: 100,
     shipCount: c.MAX_SHIP_COUNT,
+    firedShips: 0,
   },
   [c.PLAYER2]: {
     rows: {},
@@ -52,8 +53,9 @@ const initialState = {
     autoPlay: true,
     autoPlayAttack: {},
     lastAttackValue: c.HERE_IS_LOSER,
-    progress: 100,
+    progress: c.MAX_LIFE,
     shipCount: c.MAX_SHIP_COUNT,
+    firedShips: 0,
   },
   isLoading: false,
   activePlayer: c.PLAYER1,
@@ -69,6 +71,8 @@ const initialState = {
   shipColor: c.DEFAULT_SHIP_COLOR,
   bgImageUrl: c.DEFAULT_BACKGROUND_IMAGE_URL,
   bgUrls: c.BG_URLS,
+  isGameOver: false,
+  records: [],
 };
 
 /*
@@ -83,16 +87,20 @@ const handlers = {
       rows,
     },
   }),
-  [t.COUNT_ATTACK]: (state, action) => {
-    const player = action.payload;
-    return {
-      ...state,
-      [player]: {
-        ...state[player],
-        attacksNum: state[player].attacksNum + 1,
-      },
-    };
-  },
+  [t.COUNT_ATTACK]: (state, { payload: { player } }) => ({
+    ...state,
+    [player]: {
+      ...state[player],
+      attacksNum: state[player].attacksNum + 1,
+    },
+  }),
+  [t.COUNT_FIRED_SHIPS]: (state, { payload: { player } }) => ({
+    ...state,
+    [player]: {
+      ...state[player],
+      firedShips: state[player].firedShips + 1,
+    },
+  }),
   [t.HIT_SHIP]: (state, { payload: { id, num, player } }) => ({
     ...state,
     [player]: {
@@ -166,9 +174,17 @@ const handlers = {
     ...state,
     alert: '',
   }),
-  [t.RESET_VALID_SHIP_NUM]: (state) => ({
+  [t.RESET_VALID_SHIP_NUM]: (state, { payload }) => ({
     ...state,
     isShipNumValid: !state.isShipNumValid,
+    [c.PLAYER1]: {
+      ...state[c.PLAYER1],
+      shipCount: payload,
+    },
+    [c.PLAYER2]: {
+      ...state[c.PLAYER2],
+      shipCount: payload,
+    },
   }),
   [t.HIDE_LOADER]: (state) => ({
     ...state,
@@ -186,7 +202,7 @@ const handlers = {
     ...state,
     [c.PLAYER1]: {
       ...state[c.PLAYER1],
-      autoPlay: !state.autoPlay,
+      autoPlay: !state[c.PLAYER1].autoPlay,
     },
     [c.PLAYER2]: {
       ...state[c.PLAYER2],
@@ -228,12 +244,48 @@ const handlers = {
       bgImageUrl: url,
     };
   },
+  [t.RESET_LIFE]: (state, { payload: { player, fired } }) => {
+    const newLife = ((state.shipCount - fired) * 100) / state.shipCount;
+    return {
+      ...state,
+      [player]: {
+        ...state[player],
+        progress: newLife,
+      },
+    };
+  },
+  [t.SAVE_TO_RECORDS]: (state, { payload }) => {
+    const newRecords = state.records;
+    if (!newRecords.length) {
+      newRecords.push(payload);
+    }
+    if (newRecords <= c.MAX_RECORDS_NUM) {
+      newRecords.unshift(payload);
+      for (let i = 1; i < newRecords.length; i += 1) {
+        const current = newRecords[i];
+        let j = i;
+        while (j > 0 && newRecords[j - 1].moves > current.moves) {
+          newRecords[j] = newRecords[j - 1];
+          j -= 1;
+        }
+        newRecords[j] = current;
+      }
+      if (newRecords.length > 10) {
+        newRecords.pop();
+      }
+    }
+    return {
+      ...state,
+      records: newRecords,
+    };
+  },
   [t.REFRESH_SHIP_COLOR]: (state, { payload: { color } }) => ({
     ...state,
     shipColor: color,
   }),
   [t.RESET_PROGRESS]: (state) => ({
     ...state,
+    isGameOver: false,
     [c.TYPE_MINI_SHIP]: {
       max: c.NUM_MINI_SHIPS,
       num: c.NUM_MINI_SHIPS,
@@ -262,6 +314,7 @@ const handlers = {
       ...state[c.PLAYER1],
       attacks: Array(0),
       attacksNum: 0,
+      firedShips: 0,
       autoPlay: false,
       autoPlayAttack: {},
       lastAttackValue: c.HERE_IS_LOSER,
@@ -271,6 +324,7 @@ const handlers = {
       ...state[c.PLAYER2],
       attacks: Array(0),
       attacksNum: 0,
+      firedShips: 0,
       autoPlay: true,
       autoPlayAttack: {},
       lastAttackValue: c.HERE_IS_LOSER,
@@ -280,6 +334,10 @@ const handlers = {
   [t.SET_GAME_STATE]: (state, { payload }) => ({
     ...state,
     ...payload,
+  }),
+  [t.GAME_OVER]: (state) => ({
+    ...state,
+    isGameOver: true,
   }),
   [t.SET_PLAYER_STATE]: (state, { payload: { player, newState } }) => ({
     ...state,

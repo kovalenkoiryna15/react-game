@@ -9,6 +9,9 @@ import bg7 from '~images/wp1814972.jpg';
 import bg8 from '~images/wp1814978.jpg';
 import bg9 from '~images/wp1815019.jpg';
 import bg10 from '~images/wp1815021.jpg';
+import bg11 from '~images/wallpaper1.jpg';
+import bg12 from '~images/wallpaper2.jpg';
+import bg13 from '~images/wallpaper3.jpg';
 
 // PLAYERS
 export const PLAYER1_NAME = 'Guardians of the Galaxy';
@@ -17,12 +20,14 @@ export const PLAYER1 = 0;
 export const PLAYER2 = 1;
 
 // GAME
+export const MAX_LIFE = 100;
+export const MAX_RECORDS_NUM = 10;
 export const BOARD_SIZE = 10;
 export const MAX_SHIP_COUNT = 10;
 export const ATTACK_TIME = 2000;
 export const GAME_STORAGE_KEY = 'battleship';
 export const DEFAULT_BACKGROUND_IMAGE_URL = bg1;
-export const BG_URLS = [bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10];
+export const BG_URLS = [bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11, bg12, bg13];
 
 // SHIPS
 export const DEFAULT_SHIP_COLOR = '#41E969';

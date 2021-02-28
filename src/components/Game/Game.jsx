@@ -7,13 +7,21 @@ import Board from '~components/Board';
 import Menu from '~components/Menu';
 import Footer from '~components/Footer';
 
+import getDateTime from '~utils/getDateTime';
+
 import {
   HERE_IS_FIRE, ATTACK_TIME, HERE_IS_LOSER,
 } from '~constants';
-import { randomPlay, writeLocal } from '~store/game/actions';
+import {
+  randomPlay, writeLocal, gameOver, toggleFinishModal, saveToRecords,
+} from '~store/game/actions';
 
 export default function Game() {
   const dispatch = useDispatch();
+  const userTurn = useSelector(({ game: { user } }) => user);
+  const userRecords = useSelector(({ game: { records } }) => records);
+  const userAttacks = useSelector(({ game: { [userTurn]: { attacksNum } } }) => attacksNum);
+  const isCurrentGameOver = useSelector(({ game: { isGameOver } }) => isGameOver);
   const gameStorageKey = useSelector(({ game: { storageKey } }) => storageKey);
   const currentBgImageUrl = useSelector(({ game: { bgImageUrl } }) => bgImageUrl);
   const playersIDs = useSelector(({ game: { players } }) => players);
@@ -33,9 +41,13 @@ export default function Game() {
   const lastEnemyAttackV = useSelector(
     ({ game: { [enemy]: { lastAttackValue } } }) => lastAttackValue,
   );
+  const enemyFired = useSelector(({ game: { [enemy]: { firedShips } } }) => firedShips);
+  const enemyShipCount = useSelector(({ game: { [enemy]: { shipCount } } }) => shipCount);
 
   useEffect(() => {
-    dispatch(writeLocal({ size: boardSize, activePlayer: whoseTurn }, gameStorageKey));
+    dispatch(writeLocal({
+      size: boardSize, activePlayer: whoseTurn, records: userRecords,
+    }, gameStorageKey));
     playersIDs.forEach((player) => {
       if (player === whoseTurn) {
         dispatch(writeLocal(whoseTurnState, player));
@@ -44,12 +56,24 @@ export default function Game() {
         dispatch(writeLocal(enemyState, player));
       }
     });
-    if ((isAutoPlay && lastWhoseTurnAttackV === HERE_IS_FIRE)
+    if (enemyShipCount !== enemyFired) {
+      if ((isAutoPlay && lastWhoseTurnAttackV === HERE_IS_FIRE)
         || (isAutoPlay && lastEnemyAttackV === HERE_IS_LOSER)) {
-      const interval = setTimeout(
-        () => dispatch(randomPlay(enemy, boardSize, enemyBoardState, lastAttacks)), ATTACK_TIME,
-      );
-      return () => clearInterval(interval);
+        const interval = setTimeout(
+          () => dispatch(randomPlay(enemy, boardSize, enemyBoardState, lastAttacks)), ATTACK_TIME,
+        );
+        return () => clearInterval(interval);
+      }
+    } else {
+      dispatch(gameOver());
+      dispatch(toggleFinishModal());
+      if (userTurn === whoseTurn) {
+        const { date, time } = getDateTime();
+        dispatch(saveToRecords({ userAttacks, date, time }));
+      }
+    }
+    if (isCurrentGameOver) {
+      dispatch(toggleFinishModal());
     }
     return undefined;
   }, [
@@ -66,6 +90,12 @@ export default function Game() {
     whoseTurnBoardState,
     whoseTurnState,
     gameStorageKey,
+    enemyFired,
+    enemyShipCount,
+    isCurrentGameOver,
+    userRecords,
+    userTurn,
+    userAttacks,
     dispatch,
   ]);
 

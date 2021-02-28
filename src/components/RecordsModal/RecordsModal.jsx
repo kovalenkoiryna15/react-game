@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Col, Row, Modal, Container,
 } from 'react-bootstrap';
-// import './RecordsModal.scss';
-// import bg1 from '~images/wp1814937.jpg';
+import './RecordsModal.scss';
 
 import RecordsSVG from '~components/RecordsSVG';
+
+import bgImgUrl from '~images/wallpaper1.jpg';
 
 import {
   toggleRecordsModal,
@@ -15,6 +16,7 @@ import {
 export default function RecordsModal() {
   const dispatch = useDispatch();
   const isVisible = useSelector(({ game: { isRecordsVisible } }) => isRecordsVisible);
+  const userRecords = useSelector(({ game: { records } }) => records);
 
   function onRecords() {
     dispatch(toggleRecordsModal());
@@ -23,34 +25,47 @@ export default function RecordsModal() {
   return (
     <Modal
       show={isVisible}
+      animation={false}
       className="records-modal"
       centered
       aria-labelledby="contained-modal-title-vcenter"
       dialogClassName="modal-100w"
       onHide={onRecords}
-      closeButton
-      // style={{
-      //   background: `url(${bg1})`,
-      // }}
+      style={{
+        background: `center / cover no-repeat url(${bgImgUrl})`,
+      }}
     >
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <span>Records</span>
+      <Modal.Header closeButton className="text-center justify-content-center align-items-center">
+        <Row className="text-center justify-content-center align-items-center w-100" id="contained-modal-title-vcenter">
+          <h3>Records</h3>
           <RecordsSVG />
-        </Modal.Title>
+        </Row>
       </Modal.Header>
       <Modal.Body>
         <Container className="modal-container d-flex flex-column justify-content-center align-items-center w-100 h-100">
-          {/* <Row className="text-center" id="contained-modal-title-vcenter">
-            <div>
-              <span>Records</span>
-              <RecordsSVG />
-            </div>
-          </Row> */}
           <Row sm={12} xs={12} className="justify-content-center align-items-center">
-            <Col lg={6} md={6} sm={12} xs={12}>
-              Records...
+            <Col sm={12} xs={12}>
+              <Row>
+                <Col>Attacks</Col>
+                <Col>Date, Time</Col>
+              </Row>
             </Col>
+            {
+              userRecords.length
+                ? userRecords.map((record) => (
+                  <Col sm={12} xs={12}>
+                    <Row>
+                      <Col>{`${record.userAttacks}`}</Col>
+                      <Col>{`${record.date}, ${record.time}`}</Col>
+                    </Row>
+                  </Col>
+                ))
+                : (
+                  <Col sm={12} xs={12}>
+                    No Records yet ...
+                  </Col>
+                )
+            }
           </Row>
         </Container>
       </Modal.Body>
