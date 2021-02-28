@@ -16,6 +16,7 @@ export default function Ship({
   const userBoard = useSelector(({ game: { user } }) => user);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
   const classes = `content ship ${value === HERE_IS_FIRE ? 'fired' : ''}`;
+  const colorShip = useSelector(({ game: { shipColor } }) => shipColor);
 
   function onAttack() {
     dispatch(countAttacks(player));
@@ -28,7 +29,7 @@ export default function Ship({
       disabled={userBoard === player || value === HERE_IS_FIRE || userBoard !== whoseTurn}
       onClick={onAttack}
     >
-      <ShipSVG userBoard={userBoard} player={player} value={value} />
+      <ShipSVG userBoard={userBoard} player={player} value={value} color={colorShip} />
     </Button>
   );
 }

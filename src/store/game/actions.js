@@ -1,27 +1,5 @@
-import {
-  BOARD_SIZE,
-} from '~constants';
-import {
-  HIDE_LOADER,
-  SHOW_LOADER,
-  SET_RANDOM_SHIP_POSITIONS,
-  HIT_SHIP,
-  COUNT_ATTACK,
-  MISS_HIT,
-  AUTO_ATTACK,
-  RESET_ACTIVE_PLAYER,
-  WRITE_SUCCESS,
-  WRITE_FAILURE,
-  READ_SUCCESS,
-  READ_FAILURE,
-  ALERT_MESSAGE,
-  SET_PLAYER_STATE,
-  SET_GAME_STATE,
-  RESET_IS_PLAYING,
-  RESET_SOUND,
-  TOGGLE_RECORDS_MODAL,
-  TOGGLE_FINISH_MODAL,
-} from './actions-constants';
+import * as c from '~constants';
+import * as t from './actions-constants';
 
 import randomizeShips from '~utils';
 import { setLocal, getLocal } from '~utils/localStorage-helpers';
@@ -30,49 +8,71 @@ import getRandomAttack from '~utils/auto-play';
 export const setRandomShipPositions = (
   player, rows,
 ) => ({
-  type: SET_RANDOM_SHIP_POSITIONS,
+  type: t.SET_RANDOM_SHIP_POSITIONS,
   payload: { player, rows },
 });
 
 export const resetSound = () => ({
-  type: RESET_SOUND,
+  type: t.RESET_SOUND,
   payload: undefined,
 });
 
 export const toggleRecordsModal = () => ({
-  type: TOGGLE_RECORDS_MODAL,
+  type: t.TOGGLE_RECORDS_MODAL,
   payload: undefined,
 });
 
 export const toggleFinishModal = () => ({
-  type: TOGGLE_FINISH_MODAL,
+  type: t.TOGGLE_FINISH_MODAL,
+  payload: undefined,
+});
+
+export const toggleOptionsModal = () => ({
+  type: t.TOGGLE_OPTIONS_MODAL,
   payload: undefined,
 });
 
 export const resetIsPlaying = () => ({
-  type: RESET_IS_PLAYING,
+  type: t.RESET_IS_PLAYING,
   payload: undefined,
 });
 
+export const resetIsShipNumValid = () => ({
+  type: t.RESET_VALID_SHIP_NUM,
+  payload: undefined,
+});
+
+export const refreshBackground = () => ({
+  type: t.REFRESH_BACKGROUND,
+  payload: undefined,
+});
+
+export const selectShipColor = (color) => ({
+  type: t.REFRESH_SHIP_COLOR,
+  payload: { color },
+});
+
 export const showLoader = () => ({
-  type: SHOW_LOADER,
+  type: t.SHOW_LOADER,
   payload: undefined,
 });
 
 export const hideLoader = () => ({
-  type: HIDE_LOADER,
+  type: t.HIDE_LOADER,
   payload: undefined,
 });
 
 export const countAttacks = (player) => ({
-  type: COUNT_ATTACK,
+  type: t.COUNT_ATTACK,
   payload: player,
 });
 
-export const setRandom = (player, size = BOARD_SIZE) => async (dispatch) => {
+export const setRandom = (
+  player, numMiniShip, numSmallShip, numMediumShip, numBigShip, size = c.BOARD_SIZE,
+) => async (dispatch) => {
   try {
     dispatch(showLoader());
-    const rows = await randomizeShips(size);
+    const rows = await randomizeShips(size, numMiniShip, numSmallShip, numMediumShip, numBigShip);
     dispatch(setRandomShipPositions(player, rows));
     dispatch(hideLoader());
   } catch (error) {
@@ -81,17 +81,17 @@ export const setRandom = (player, size = BOARD_SIZE) => async (dispatch) => {
 };
 
 export const getHit = (id, num, player) => ({
-  type: HIT_SHIP,
+  type: t.HIT_SHIP,
   payload: { id, num, player },
 });
 
 export const missHit = (id, num, player) => ({
-  type: MISS_HIT,
+  type: t.MISS_HIT,
   payload: { id, num, player },
 });
 
 export const setRandomAttack = (enemy, num, id, value) => ({
-  type: AUTO_ATTACK,
+  type: t.AUTO_ATTACK,
   payload: {
     enemy, num, id, value,
   },
@@ -107,42 +107,71 @@ export const randomPlay = (enemy, size, rows, attacks) => async (dispatch) => {
 };
 
 export const resetActivePlayer = () => ({
-  type: RESET_ACTIVE_PLAYER,
+  type: t.RESET_ACTIVE_PLAYER,
   payload: undefined,
+});
+
+export const resetProgress = () => ({
+  type: t.RESET_PROGRESS,
+  payload: undefined,
+});
+
+export const resetShipNum = (type, value) => ({
+  type: t.RESET_SHIP_NUM,
+  payload: { type, value },
 });
 
 export const resetGame = () => async (dispatch) => {
   try {
     dispatch(resetActivePlayer());
+    dispatch(resetProgress());
   } catch (error) {
     throw new Error(error);
   }
 };
 
 export const writeSuccess = () => ({
-  type: WRITE_SUCCESS,
+  type: t.WRITE_SUCCESS,
   payload: undefined,
 });
 
 export const writeFailure = () => ({
-  type: WRITE_FAILURE,
+  type: t.WRITE_FAILURE,
   payload: undefined,
 });
 
 export const readSuccess = () => ({
-  type: READ_SUCCESS,
+  type: t.READ_SUCCESS,
   payload: undefined,
 });
 
 export const readFailure = () => ({
-  type: READ_FAILURE,
+  type: t.READ_FAILURE,
   payload: undefined,
 });
 
 export const alertError = (message) => ({
-  type: ALERT_MESSAGE,
+  type: t.ALERT_MESSAGE,
   payload: message,
 });
+
+export const clearAlertMessage = () => ({
+  type: t.CLEAR_ALERT_MESSAGE,
+  payload: undefined,
+});
+
+export const resetValidShipNum = () => ({
+  type: t.RESET_VALID_SHIP_NUM,
+  payload: undefined,
+});
+
+export const validateShipsNum = (miniShip, smallShip, mediumShip, bigShip) => async (dispatch) => {
+  if (+miniShip === 0 && +smallShip === 0 && +mediumShip === 0 && +bigShip === 0) {
+    dispatch(alertError('Minimum ship count 1. Please select at least 1 ship.'));
+  } else {
+    dispatch(resetValidShipNum());
+  }
+};
 
 export const writeLocal = (state, id) => async (dispatch) => {
   try {
@@ -154,7 +183,7 @@ export const writeLocal = (state, id) => async (dispatch) => {
 };
 
 export const setPlayerState = (player, newState) => ({
-  type: SET_PLAYER_STATE,
+  type: t.SET_PLAYER_STATE,
   payload: { player, newState },
 });
 
@@ -171,7 +200,7 @@ export const readLocalPlayerState = (player) => async (dispatch) => {
 };
 
 export const setGameState = (state) => ({
-  type: SET_GAME_STATE,
+  type: t.SET_GAME_STATE,
   payload: state,
 });
 

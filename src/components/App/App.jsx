@@ -6,6 +6,7 @@ import WelcomeModal from '~components/WelcomeModal';
 import { readLocalPlayerState, readLocalGameState } from '~store/game/actions';
 import RecordsModal from '~components/RecordsModal';
 import FinishModal from '~components/FinishModal';
+import OptionsModal from '~components/OptionsModal';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export default function App() {
       <WelcomeModal />
       <RecordsModal />
       <FinishModal />
+      <OptionsModal />
     </>
   );
 }

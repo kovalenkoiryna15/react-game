@@ -4,7 +4,7 @@ import { Container, Row } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Board from '~components/Board';
-import Options from '~components/Options';
+import Menu from '~components/Menu';
 import Footer from '~components/Footer';
 
 import {
@@ -12,11 +12,10 @@ import {
 } from '~constants';
 import { randomPlay, writeLocal } from '~store/game/actions';
 
-import bg1 from '~images/wp1814937.jpg';
-
 export default function Game() {
   const dispatch = useDispatch();
   const gameStorageKey = useSelector(({ game: { storageKey } }) => storageKey);
+  const currentBgImageUrl = useSelector(({ game: { bgImageUrl } }) => bgImageUrl);
   const playersIDs = useSelector(({ game: { players } }) => players);
   const loading = useSelector(({ game: { isLoading } }) => isLoading);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
@@ -73,14 +72,14 @@ export default function Game() {
   return (
     <Container
       fluid
-      className="d-flex flex-column justify-content-center align-items-center"
+      className="d-flex flex-column justify-content-between align-items-center pt-3"
       style={{
         minHeight: '100vh',
-        background: `url(${bg1})`,
+        background: `center / cover no-repeat url(${currentBgImageUrl})`,
       }}
     >
-      <Row sm={12} xs={12} className="w-100">
-        <Options />
+      <Row sm={12} xs={12} className="w-100 px-4">
+        <Menu />
         {
           loading
             ? (
