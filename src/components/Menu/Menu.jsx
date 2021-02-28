@@ -4,7 +4,7 @@ import { Col, Button, Row } from 'react-bootstrap';
 import './Menu.scss';
 
 import {
-  resetSound, toggleRecordsModal, refreshBackground, toggleOptionsModal, resetGame,
+  resetSound, toggleRecordsModal, refreshBackground, toggleOptionsModal, resetGame, resetAutoPlay,
 } from '~store/game/actions';
 
 import SoundOnSVG from '~components/Sound/SoundOnSVG';
@@ -36,6 +36,10 @@ export default function Menu() {
     dispatch(refreshBackground());
   }
 
+  function onAutoPlay() {
+    dispatch(resetAutoPlay());
+  }
+
   return (
     <Col lg={2} md={12} sm={12} xs={12}>
       <Row>
@@ -51,10 +55,10 @@ export default function Menu() {
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options" onClick={onOptions} disabled={loading}>Auto play</Button>
+              <Button className="w-100 options" onClick={onAutoPlay} disabled={loading}>Auto play</Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options" onClick={onOptions} disabled={loading}>Auto finish</Button>
+              <Button className="w-100 options" onClick={onAutoPlay} disabled={loading}>Auto finish</Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
               <Button className="w-100 options btn-svg" onClick={onRecords} disabled={loading}>

@@ -9,7 +9,7 @@
 - [x] [sass](https://sass-lang.com/)
 - [x] [ESLint](https://eslint.org/), [Stylelint](https://stylelint.io/),
       [Prettier](https://prettier.io/), [EditorConfig](https://editorconfig.org/)
-- [x] [TravisCI](https://travis-ci.org/)
+- [x] [TravisCI](https://www.travis-ci.com/)
 
 ## Требования к оформлению приложения
 

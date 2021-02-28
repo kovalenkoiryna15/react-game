@@ -182,6 +182,17 @@ const handlers = {
     ...state,
     isPlaying: !state.isPlaying,
   }),
+  [t.RESET_AUTO_PLAY]: (state) => ({
+    ...state,
+    [c.PLAYER1]: {
+      ...state[c.PLAYER1],
+      autoPlay: !state.autoPlay,
+    },
+    [c.PLAYER2]: {
+      ...state[c.PLAYER2],
+      autoPlay: true,
+    },
+  }),
   [t.RESET_SHIP_NUM]: (state, { payload: { type, value } }) => ({
     ...state,
     [type]: {
