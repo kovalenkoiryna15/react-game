@@ -3,10 +3,6 @@ import {
   HERE_IS_SEE,
   HERE_IS_BUFFER,
   HERE_IS_SHIP,
-  NUM_MINI_SHIPS,
-  NUM_SMALL_SHIPS,
-  NUM_MEDIUM_SHIPS,
-  NUM_BIG_SHIPS,
   NUM_CELLS_MINI_SHIPS,
   NUM_CELLS_SMALL_SHIPS,
   NUM_CELLS_MEDIUM_SHIPS,
@@ -247,18 +243,18 @@ function getShipPosition(size, rows, cellsNum, align = undefined) {
   return cellPositions;
 }
 
-function getShips() {
+function getShips(numMiniShip, numSmallShip, numMediumShip, numBigShip) {
   const ships = [];
-  for (let i = 0; i < NUM_BIG_SHIPS; i += 1) {
+  for (let i = 0; i < numBigShip; i += 1) {
     ships.push({ cellsNum: NUM_CELLS_BIG_SHIPS });
   }
-  for (let i = 0; i < NUM_MEDIUM_SHIPS; i += 1) {
+  for (let i = 0; i < numMediumShip; i += 1) {
     ships.push({ cellsNum: NUM_CELLS_MEDIUM_SHIPS });
   }
-  for (let i = 0; i < NUM_SMALL_SHIPS; i += 1) {
+  for (let i = 0; i < numSmallShip; i += 1) {
     ships.push({ cellsNum: NUM_CELLS_SMALL_SHIPS });
   }
-  for (let i = 0; i < NUM_MINI_SHIPS; i += 1) {
+  for (let i = 0; i < numMiniShip; i += 1) {
     ships.push({ cellsNum: NUM_CELLS_MINI_SHIPS });
   }
   return ships;
@@ -283,10 +279,10 @@ function updateRows(rows, cellPositions) {
   return newRows;
 }
 
-export default function randomizeShips(size) {
+export default function randomizeShips(size, numMiniShip, numSmallShip, numMediumShip, numBigShip) {
   const cols = upperCaseAlp.slice(0, size);
   let rows = createEmptyRows(size, cols);
-  const ships = getShips();
+  const ships = getShips(numMiniShip, numSmallShip, numMediumShip, numBigShip);
   for (let i = 0; i < ships.length; i += 1) {
     let cellPositions = getShipPosition(size, rows, ships[i].cellsNum);
     if (!cellPositions[0]) {

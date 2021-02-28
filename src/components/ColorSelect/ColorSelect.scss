@@ -1,0 +1,13 @@
+.basic-single {
+  background-color: #333;
+
+  & .select__control {
+    background-color: #333;
+    border-color: #333;
+
+    & .select__value-container,
+    & .select__indicators {
+      background-color: #333;
+    }
+  }
+}

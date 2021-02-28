@@ -1,75 +1,89 @@
-import {
-  HIDE_LOADER,
-  SHOW_LOADER,
-  SET_RANDOM_SHIP_POSITIONS,
-  HIT_SHIP,
-  COUNT_ATTACK,
-  MISS_HIT,
-  AUTO_ATTACK,
-  RESET_ACTIVE_PLAYER,
-  RESET_PROGRESS,
-  ALERT_MESSAGE,
-  SET_PLAYER_STATE,
-  SET_GAME_STATE,
-  RESET_IS_PLAYING,
-  RESET_SOUND,
-  TOGGLE_RECORDS_MODAL,
-  TOGGLE_FINISH_MODAL,
-} from './actions-constants';
-import {
-  PLAYER1,
-  PLAYER2,
-  HERE_IS_FIRE,
-  HERE_IS_LOSER,
-  PLAYER1_NAME,
-  PLAYER2_NAME,
-  BOARD_SIZE,
-  GAME_STORAGE_KEY,
-} from '~constants';
+import * as t from './actions-constants';
+import * as c from '~constants';
+
+/*
+** INITIAL STATE
+*/
 
 const initialState = {
-  size: BOARD_SIZE,
-  players: [PLAYER1, PLAYER2],
-  [PLAYER1]: {
+  size: c.BOARD_SIZE,
+  shipCount: c.MAX_SHIP_COUNT,
+  [c.TYPE_MINI_SHIP]: {
+    max: c.NUM_MINI_SHIPS,
+    num: c.NUM_MINI_SHIPS,
+    type: c.TYPE_MINI_SHIP,
+    cells: c.NUM_CELLS_MINI_SHIPS,
+  },
+  [c.TYPE_SMALL_SHIP]: {
+    max: c.NUM_SMALL_SHIPS,
+    num: c.NUM_SMALL_SHIPS,
+    type: c.TYPE_SMALL_SHIP,
+    cells: c.NUM_CELLS_SMALL_SHIPS,
+  },
+  [c.TYPE_MEDIUM_SHIP]: {
+    max: c.NUM_MEDIUM_SHIPS,
+    num: c.NUM_MEDIUM_SHIPS,
+    type: c.TYPE_MEDIUM_SHIP,
+    cells: c.NUM_CELLS_MEDIUM_SHIPS,
+  },
+  [c.TYPE_BIG_SHIP]: {
+    max: c.NUM_BIG_SHIPS,
+    num: c.NUM_BIG_SHIPS,
+    type: c.TYPE_BIG_SHIP,
+    cells: c.NUM_CELLS_BIG_SHIPS,
+  },
+  players: [c.PLAYER1, c.PLAYER2],
+  [c.PLAYER1]: {
     rows: {},
     attacks: [],
     attacksNum: 0,
-    name: PLAYER1_NAME,
+    name: c.PLAYER1_NAME,
     autoPlay: false,
     autoPlayAttack: {},
-    lastAttackValue: HERE_IS_LOSER,
+    lastAttackValue: c.HERE_IS_LOSER,
     progress: 100,
+    shipCount: c.MAX_SHIP_COUNT,
   },
-  [PLAYER2]: {
+  [c.PLAYER2]: {
     rows: {},
     attacks: [],
     attacksNum: 0,
-    name: PLAYER2_NAME,
+    name: c.PLAYER2_NAME,
     autoPlay: true,
     autoPlayAttack: {},
-    lastAttackValue: HERE_IS_LOSER,
+    lastAttackValue: c.HERE_IS_LOSER,
     progress: 100,
+    shipCount: c.MAX_SHIP_COUNT,
   },
   isLoading: false,
-  isPlaying: false,
-  activePlayer: PLAYER1,
-  user: PLAYER1,
+  activePlayer: c.PLAYER1,
+  user: c.PLAYER1,
   alert: undefined,
-  storageKey: GAME_STORAGE_KEY,
+  storageKey: c.GAME_STORAGE_KEY,
   isSound: true,
+  isPlaying: false,
   isRecordsVisible: false,
   isFinishVisible: false,
+  isOptionsVisible: false,
+  isShipNumValid: false,
+  shipColor: c.DEFAULT_SHIP_COLOR,
+  bgImageUrl: c.DEFAULT_BACKGROUND_IMAGE_URL,
+  bgUrls: c.BG_URLS,
 };
 
+/*
+** HANDLERS
+*/
+
 const handlers = {
-  [SET_RANDOM_SHIP_POSITIONS]: (state, { payload: { rows, player } }) => ({
+  [t.SET_RANDOM_SHIP_POSITIONS]: (state, { payload: { rows, player } }) => ({
     ...state,
     [player]: {
       ...state[player],
       rows,
     },
   }),
-  [COUNT_ATTACK]: (state, action) => {
+  [t.COUNT_ATTACK]: (state, action) => {
     const player = action.payload;
     return {
       ...state,
@@ -79,7 +93,7 @@ const handlers = {
       },
     };
   },
-  [HIT_SHIP]: (state, { payload: { id, num, player } }) => ({
+  [t.HIT_SHIP]: (state, { payload: { id, num, player } }) => ({
     ...state,
     [player]: {
       ...state[player],
@@ -87,16 +101,16 @@ const handlers = {
         ...state[player].rows,
         [num]: {
           ...state[player].rows[num],
-          [id]: HERE_IS_FIRE,
+          [id]: c.HERE_IS_FIRE,
         },
       },
     },
     [state.activePlayer]: {
       ...state[state.activePlayer],
-      attacks: [...state[state.activePlayer].attacks, { num, id, value: HERE_IS_LOSER }],
+      attacks: [...state[state.activePlayer].attacks, { num, id, value: c.HERE_IS_LOSER }],
     },
   }),
-  [MISS_HIT]: (state, { payload: { id, num, player } }) => ({
+  [t.MISS_HIT]: (state, { payload: { id, num, player } }) => ({
     ...state,
     [player]: {
       ...state[player],
@@ -104,23 +118,23 @@ const handlers = {
         ...state[player].rows,
         [num]: {
           ...state[player].rows[num],
-          [id]: HERE_IS_LOSER,
+          [id]: c.HERE_IS_LOSER,
         },
       },
     },
     [state.activePlayer]: {
       ...state[state.activePlayer],
-      attacks: [...state[state.activePlayer].attacks, { num, id, value: HERE_IS_LOSER }],
+      attacks: [...state[state.activePlayer].attacks, { num, id, value: c.HERE_IS_LOSER }],
     },
     activePlayer: +!state.activePlayer,
   }),
-  [AUTO_ATTACK]: (state, {
+  [t.AUTO_ATTACK]: (state, {
     payload: {
       enemy, num, id, value,
     },
   }) => {
     let newActivePlayer = enemy;
-    if (value === HERE_IS_FIRE) {
+    if (value === c.HERE_IS_FIRE) {
       newActivePlayer = +!enemy;
     }
     return {
@@ -144,64 +158,119 @@ const handlers = {
       activePlayer: newActivePlayer,
     };
   },
-  [ALERT_MESSAGE]: (state, { payload }) => ({
+  [t.ALERT_MESSAGE]: (state, { payload }) => ({
     ...state,
     alert: payload,
   }),
-  [HIDE_LOADER]: (state) => ({
+  [t.CLEAR_ALERT_MESSAGE]: (state) => ({
+    ...state,
+    alert: '',
+  }),
+  [t.RESET_VALID_SHIP_NUM]: (state) => ({
+    ...state,
+    isShipNumValid: !state.isShipNumValid,
+  }),
+  [t.HIDE_LOADER]: (state) => ({
     ...state,
     isLoading: false,
   }),
-  [SHOW_LOADER]: (state) => ({
+  [t.SHOW_LOADER]: (state) => ({
     ...state,
     isLoading: true,
   }),
-  [RESET_IS_PLAYING]: (state) => ({
+  [t.RESET_IS_PLAYING]: (state) => ({
     ...state,
-    isPlaying: true,
+    isPlaying: !state.isPlaying,
   }),
-  [RESET_SOUND]: (state) => ({
+  [t.RESET_SHIP_NUM]: (state, { payload: { type, value } }) => ({
     ...state,
-    isSound: !state.isSound,
+    [type]: {
+      ...state[type],
+      num: value,
+    },
   }),
-  [TOGGLE_RECORDS_MODAL]: (state) => ({
+  [t.TOGGLE_RECORDS_MODAL]: (state) => ({
     ...state,
     isRecordsVisible: !state.isRecordsVisible,
   }),
-  [TOGGLE_FINISH_MODAL]: (state) => ({
+  [t.TOGGLE_FINISH_MODAL]: (state) => ({
     ...state,
     isFinishVisible: !state.isFinishVisible,
   }),
-  [RESET_ACTIVE_PLAYER]: (state) => ({
+  [t.TOGGLE_OPTIONS_MODAL]: (state) => ({
     ...state,
-    activePlayer: PLAYER1,
+    isOptionsVisible: !state.isOptionsVisible,
   }),
-  [RESET_PROGRESS]: (state) => ({
+  [t.RESET_ACTIVE_PLAYER]: (state) => ({
     ...state,
-    [PLAYER1]: {
-      ...state[PLAYER1],
+    activePlayer: c.PLAYER1,
+  }),
+  [t.REFRESH_BACKGROUND]: (state) => {
+    const currentIndex = state.bgUrls.indexOf(state.bgImageUrl);
+    let urlIndex = currentIndex + 1;
+    if (urlIndex === state.bgUrls.length) {
+      urlIndex = 0;
+    }
+    const url = state.bgUrls[urlIndex];
+    return {
+      ...state,
+      bgImageUrl: url,
+    };
+  },
+  [t.REFRESH_SHIP_COLOR]: (state, { payload: { color } }) => ({
+    ...state,
+    shipColor: color,
+  }),
+  [t.RESET_PROGRESS]: (state) => ({
+    ...state,
+    [c.TYPE_MINI_SHIP]: {
+      max: c.NUM_MINI_SHIPS,
+      num: c.NUM_MINI_SHIPS,
+      type: c.TYPE_MINI_SHIP,
+      cells: c.NUM_CELLS_MINI_SHIPS,
+    },
+    [c.TYPE_SMALL_SHIP]: {
+      max: c.NUM_SMALL_SHIPS,
+      num: c.NUM_SMALL_SHIPS,
+      type: c.TYPE_SMALL_SHIP,
+      cells: c.NUM_CELLS_SMALL_SHIPS,
+    },
+    [c.TYPE_MEDIUM_SHIP]: {
+      max: c.NUM_MEDIUM_SHIPS,
+      num: c.NUM_MEDIUM_SHIPS,
+      type: c.TYPE_MEDIUM_SHIP,
+      cells: c.NUM_CELLS_MEDIUM_SHIPS,
+    },
+    [c.TYPE_BIG_SHIP]: {
+      max: c.NUM_BIG_SHIPS,
+      num: c.NUM_BIG_SHIPS,
+      type: c.TYPE_BIG_SHIP,
+      cells: c.NUM_CELLS_BIG_SHIPS,
+    },
+    [c.PLAYER1]: {
+      ...state[c.PLAYER1],
       attacks: Array(0),
       attacksNum: 0,
       autoPlay: false,
       autoPlayAttack: {},
-      lastAttackValue: HERE_IS_LOSER,
+      lastAttackValue: c.HERE_IS_LOSER,
       progress: 100,
     },
-    [PLAYER2]: {
-      ...state[PLAYER2],
+    [c.PLAYER2]: {
+      ...state[c.PLAYER2],
       attacks: Array(0),
       attacksNum: 0,
       autoPlay: true,
       autoPlayAttack: {},
-      lastAttackValue: HERE_IS_LOSER,
+      lastAttackValue: c.HERE_IS_LOSER,
       progress: 100,
     },
   }),
-  [SET_GAME_STATE]: (state, { payload }) => ({
+  [t.SET_GAME_STATE]: (state, { payload }) => ({
     ...state,
     ...payload,
   }),
-  [SET_PLAYER_STATE]: (state, { payload: { player, newState } }) => ({
+  [t.SET_PLAYER_STATE]: (state, { payload: { player, newState } }) => ({
     ...state,
     [player]: {
       ...state.player,

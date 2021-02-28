@@ -29,5 +29,21 @@ module.exports = {
         config: 'webpack.config.js',
       },
     },
-  }
+  },
+  rules: {
+    'jsx-a11y/control-has-associated-label': [2, {
+      labelAttributes: ['label'],
+      ignoreElements: [
+        'audio',
+        'canvas',
+        'embed',
+        'input',
+        'textarea',
+        'tr',
+        'video',
+        'option',
+      ],
+    }],
+    'no-nested-ternary': 'off',
+  },
 };

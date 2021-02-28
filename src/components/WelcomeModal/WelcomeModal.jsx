@@ -4,7 +4,7 @@ import {
   Col, Button, Row, Modal, Container,
 } from 'react-bootstrap';
 import './WelcomeModal.scss';
-import bg1 from '~images/wp1814937.jpg';
+import bgImgUrl from '~images/wp1814937.jpg';
 
 import Footer from '~components/Footer';
 import SoundOnSVG from '~components/Sound/SoundOnSVG';
@@ -13,22 +13,14 @@ import RecordsSVG from '~components/RecordsSVG';
 import NewGameSVG from '~components/NewGameSVG';
 
 import {
-  setRandom, resetGame, resetIsPlaying, resetSound, toggleRecordsModal,
+  resetIsPlaying, resetSound, toggleRecordsModal, toggleOptionsModal,
 } from '~store/game/actions';
 
 export default function WelcomeModal() {
   const dispatch = useDispatch();
   const isSoundOn = useSelector(({ game: { isSound } }) => isSound);
   const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
-  const isVisible = useSelector(({ game: { isRecordsVisible } }) => isRecordsVisible);
   const loading = useSelector(({ game: { isLoading } }) => isLoading);
-  const playersIDs = useSelector(({ game: { players } }) => players);
-
-  function onStart() {
-    dispatch(resetGame()); // reset active player and game progress
-    playersIDs.forEach((player) => dispatch(setRandom(player)));
-    dispatch(resetIsPlaying());
-  }
 
   function onContinue() {
     dispatch(resetIsPlaying());
@@ -42,6 +34,11 @@ export default function WelcomeModal() {
     dispatch(toggleRecordsModal());
   }
 
+  function onOptions() {
+    dispatch(resetIsPlaying());
+    dispatch(toggleOptionsModal());
+  }
+
   return (
     <Modal
       show={!isPlay}
@@ -52,11 +49,13 @@ export default function WelcomeModal() {
       dialogClassName="modal-100w"
       onHide={() => null}
       style={{
-        background: `url(${bg1})`,
+        background: `center / cover no-repeat url(${bgImgUrl})`,
       }}
     >
       <Modal.Body>
-        <Container className="modal-container d-flex flex-column justify-content-center align-items-center w-100 h-100">
+        <Container
+          className="modal-container d-flex flex-column justify-content-center align-items-center w-100 h-100"
+        >
           <Row className="text-center" id="contained-modal-title-vcenter">
             <h1>BattleShip Game</h1>
           </Row>
@@ -66,7 +65,7 @@ export default function WelcomeModal() {
                 <Col lg={12} md={12} sm={12} xs={12}>
                   <Row>
                     <Col lg={12} md={12} sm={12} xs={12}>
-                      <Button className="w-100 options btn-svg" onClick={onStart} disabled={loading}>
+                      <Button className="w-100 options btn-svg" onClick={onOptions} disabled={loading}>
                         <span>New Game</span>
                         <NewGameSVG />
                       </Button>

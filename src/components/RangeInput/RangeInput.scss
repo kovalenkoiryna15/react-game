@@ -1,0 +1,24 @@
+.custom-range.range__input:focus .range__input::-webkit-slider-runnable-track,
+.custom-range.range__input::-webkit-slider-runnable-track {
+  background: #ed044b;
+  outline: none;
+}
+
+.custom-range.range__input::-webkit-slider-thumb {
+  background: #ed044b;
+}
+
+.range__list {
+  display: flex;
+  justify-content: space-between;
+  height: auto;
+  overflow: hidden;
+  margin-top: 0.25rem;
+
+  & .range__option::before {
+    content: attr(value);
+    font-size: 1rem;
+    color: #ed044b;
+    display: block;
+  }
+}
