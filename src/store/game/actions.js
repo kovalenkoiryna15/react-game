@@ -37,6 +37,11 @@ export const resetIsPlaying = () => ({
   payload: undefined,
 });
 
+export const resetAutoPlay = () => ({
+  type: t.RESET_AUTO_PLAY,
+  payload: undefined,
+});
+
 export const resetIsShipNumValid = () => ({
   type: t.RESET_VALID_SHIP_NUM,
   payload: undefined,
