@@ -4,20 +4,6 @@
   }
 }
 
-.rotate {
-  transform: rotate(-90deg);
-  /* Safari */
-  -webkit-transform: rotate(-90deg);
-  /* Firefox */
-  -moz-transform: rotate(-90deg);
-  /* IE */
-  -ms-transform: rotate(-90deg);
-  /* Opera */
-  -o-transform: rotate(-90deg);
-  /* Internet Explorer */
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
-
 .footer {
   color: #ed044b;
   align-items: center;
@@ -41,17 +27,17 @@
     }
   }
 
-  .collaborator,
+  .author,
   .rsschool-logo {
     color: #ed044b;
     text-decoration: none;
     text-transform: uppercase;
   }
 
-  .collaborator:hover,
+  .author:hover,
   .rsschool-logo:hover {
     color: #ed044b;
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 
   .rsschool-logo-svg {
