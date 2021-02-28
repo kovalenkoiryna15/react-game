@@ -13,7 +13,7 @@ import RecordsSVG from '~components/RecordsSVG';
 import NewGameSVG from '~components/NewGameSVG';
 
 import {
-  resetIsPlaying, resetSound, toggleRecordsModal, toggleOptionsModal,
+  resetIsPlaying, resetSound, toggleRecordsModal, toggleOptionsModal, resetGame,
 } from '~store/game/actions';
 
 export default function WelcomeModal() {
@@ -35,6 +35,7 @@ export default function WelcomeModal() {
   }
 
   function onOptions() {
+    dispatch(resetGame());
     dispatch(resetIsPlaying());
     dispatch(toggleOptionsModal());
   }

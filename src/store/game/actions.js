@@ -69,7 +69,12 @@ export const hideLoader = () => ({
 
 export const countAttacks = (player) => ({
   type: t.COUNT_ATTACK,
-  payload: player,
+  payload: { player },
+});
+
+export const countFired = (player) => ({
+  type: t.COUNT_FIRED_SHIPS,
+  payload: { player },
 });
 
 export const setRandom = (
@@ -121,6 +126,11 @@ export const resetProgress = () => ({
   payload: undefined,
 });
 
+export const resetLife = ({ player, fired }) => ({
+  type: t.RESET_LIFE,
+  payload: { player, fired },
+});
+
 export const resetShipNum = (type, value) => ({
   type: t.RESET_SHIP_NUM,
   payload: { type, value },
@@ -165,8 +175,18 @@ export const clearAlertMessage = () => ({
   payload: undefined,
 });
 
-export const resetValidShipNum = () => ({
+export const resetValidShipNum = (num) => ({
   type: t.RESET_VALID_SHIP_NUM,
+  payload: num,
+});
+
+export const gameOver = () => ({
+  type: t.GAME_OVER,
+  payload: undefined,
+});
+
+export const saveToRecords = () => ({
+  type: t.SAVE_TO_RECORDS,
   payload: undefined,
 });
 
@@ -174,7 +194,8 @@ export const validateShipsNum = (miniShip, smallShip, mediumShip, bigShip) => as
   if (+miniShip === 0 && +smallShip === 0 && +mediumShip === 0 && +bigShip === 0) {
     dispatch(alertError('Minimum ship count 1. Please select at least 1 ship.'));
   } else {
-    dispatch(resetValidShipNum());
+    const num = +miniShip + +smallShip + +mediumShip + +bigShip;
+    dispatch(resetValidShipNum(num));
   }
 };
 

@@ -17,7 +17,8 @@ export default function See({
   const boardState = useSelector(({ game: { [whoseTurn]: { rows } } }) => rows);
   const boardSize = useSelector(({ game: { size } }) => size);
   const lastAttacks = useSelector(({ game: { [enemy]: { attacks } } }) => attacks);
-  const userBoard = useSelector(({ game: { user } }) => user);
+  const userTurn = useSelector(({ game: { user } }) => user);
+  const isAutoPlay = useSelector(({ game: { [userTurn]: { autoPlay } } }) => autoPlay);
 
   function onAttack() {
     dispatch(countAttacks(whoseTurn));
@@ -31,7 +32,10 @@ export default function See({
   return (
     <Button
       className={classes}
-      disabled={userBoard === player || value === HERE_IS_LOSER || userBoard !== whoseTurn}
+      disabled={userTurn === player
+        || value === HERE_IS_LOSER
+        || userTurn !== whoseTurn
+        || (isAutoPlay && userTurn === whoseTurn)}
       onClick={onAttack}
     />
   );

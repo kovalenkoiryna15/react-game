@@ -97,11 +97,19 @@ export default function OptionsModal() {
                   : (
                     <Row md={12} sm={12} xs={12}>
                       <Col md={12} sm={12} xs={12} className="text-center">
-                        <Alert>{alertMessage}</Alert>
+                        <Alert className="mb-1">{alertMessage}</Alert>
                       </Col>
                     </Row>
                   )
               }
+              <Row md={12} sm={12} xs={12} className="mb-4 justify-content-center align-items-center">
+                <Col md={6} sm={12} xs={12}>
+                  <Row md={12} sm={12} xs={12}>
+                    <Col sm={6} xs={6} className="text-center">Ship color</Col>
+                    <Col sm={6} xs={6}><ColorSelect /></Col>
+                  </Row>
+                </Col>
+              </Row>
               <Row md={12} sm={12} xs={12} className="mb-1">
                 <Col md={12} sm={12} xs={12}>
                   <Row md={12} sm={12} xs={12}>
@@ -142,15 +150,8 @@ export default function OptionsModal() {
                   </Row>
                 </Col>
               </Row>
-              <Row md={12} sm={12} xs={12} className="mb-1 justify-content-center align-items-center">
-                <Col md={6} sm={12} xs={12}>
-                  <Row md={12} sm={12} xs={12}>
-                    <ColorSelect />
-                  </Row>
-                </Col>
-              </Row>
-              <Row md={12} sm={12} xs={12}>
-                <Col md={12} sm={12} xs={12}>
+              <Row md={12} sm={12} xs={12} className="justify-content-center align-items-center">
+                <Col md={4} sm={12} xs={12}>
                   <Button className="w-100 options btn-svg" onClick={onStart}>
                     <span>Save & Start</span>
                     <NewGameSVG />
