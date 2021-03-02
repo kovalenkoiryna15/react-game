@@ -93,17 +93,15 @@ export default function OptionsModal() {
                   </h4>
                 </Col>
               </Row>
-              {
-                isValid
-                  ? null
-                  : (
-                    <Row md={12} sm={12} xs={12}>
-                      <Col md={12} sm={12} xs={12} className="text-center">
-                        <Alert className="mb-1">{alertMessage}</Alert>
-                      </Col>
-                    </Row>
-                  )
-              }
+              <Row md={12} sm={12} xs={12}>
+                <Col md={12} sm={12} xs={12} className="text-center">
+                  {
+                    isValid
+                      ? <Alert className="mb-1" />
+                      : <Alert className="mb-1">{alertMessage}</Alert>
+                  }
+                </Col>
+              </Row>
               <Row md={12} sm={12} xs={12} className="mb-4 justify-content-center align-items-center">
                 <Col md={6} sm={12} xs={12}>
                   <Row md={12} sm={12} xs={12}>
