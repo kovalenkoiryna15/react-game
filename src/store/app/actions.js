@@ -5,9 +5,19 @@ export const resetSound = () => ({
   payload: undefined,
 });
 
+export const resetSoundVolume = (volume) => ({
+  type: t.RESET_SOUND_VOLUME,
+  payload: volume,
+});
+
 export const resetMusic = () => ({
   type: t.RESET_MUSIC,
   payload: undefined,
+});
+
+export const resetMusicVolume = (volume) => ({
+  type: t.RESET_MUSIC_VOLUME,
+  payload: volume,
 });
 
 export const toggleWelcomeModal = () => ({

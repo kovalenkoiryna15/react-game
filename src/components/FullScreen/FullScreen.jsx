@@ -4,10 +4,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import useFullscreenStatus from '~utils/useFullscreenStatus';
 import ExpandSVG from './ExpandSVG';
 
 export default function FullScreen({ children }) {
+  const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
   const fullScreenElement = React.useRef(null);
   let isFullscreen;
   let setIsFullscreen;
@@ -42,11 +44,21 @@ export default function FullScreen({ children }) {
             {errorMessage}
           </button>
         ) : isFullscreen ? (
-          <button type="button" onClick={handleExitFullscreen} className="my-button">
+          <button
+            type="button"
+            onClick={handleExitFullscreen}
+            className="my-button"
+            style={isPlay ? { display: 'block' } : null}
+          >
             <ExpandSVG />
           </button>
         ) : (
-          <button type="button" onClick={setIsFullscreen} className="my-button">
+          <button
+            type="button"
+            onClick={setIsFullscreen}
+            className="my-button"
+            style={isPlay ? { display: 'block' } : null}
+          >
             <ExpandSVG />
           </button>
         )}
@@ -56,5 +68,5 @@ export default function FullScreen({ children }) {
 }
 
 FullScreen.propTypes = {
-  children: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };

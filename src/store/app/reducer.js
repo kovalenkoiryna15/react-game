@@ -7,7 +7,7 @@ import * as c from '~constants';
 
 const initialState = {
   isLoading: false,
-  alert: undefined,
+  alert: '',
   isSound: true,
   isMusic: true,
   isWelcomeVisible: false,
@@ -17,6 +17,8 @@ const initialState = {
   shipColor: c.DEFAULT_SHIP_COLOR,
   bgImageUrl: c.DEFAULT_BACKGROUND_IMAGE_URL,
   bgUrls: c.BG_URLS,
+  soundVolume: 1,
+  musicVolume: 1,
 };
 
 /*
@@ -59,6 +61,14 @@ const handlers = {
   [t.RESET_SOUND]: (state) => ({
     ...state,
     isSound: !state.isSound,
+  }),
+  [t.RESET_SOUND_VOLUME]: (state, { payload }) => ({
+    ...state,
+    soundVolume: payload,
+  }),
+  [t.RESET_MUSIC_VOLUME]: (state, { payload }) => ({
+    ...state,
+    musicVolume: payload,
   }),
   [t.RESET_MUSIC]: (state) => ({
     ...state,
