@@ -12,18 +12,19 @@ import SoundOffSVG from '~components/Sound/SoundOffSVG';
 import RecordsSVG from '~components/RecordsSVG';
 import NewGameSVG from '~components/NewGameSVG';
 
+import { resetGame } from '~store/game/actions';
 import {
-  resetIsPlaying, resetSound, toggleRecordsModal, toggleOptionsModal, resetGame,
-} from '~store/game/actions';
+  toggleWelcomeModal, resetSound, toggleRecordsModal, toggleOptionsModal,
+} from '~store/app/actions';
 
 export default function WelcomeModal() {
   const dispatch = useDispatch();
-  const isSoundOn = useSelector(({ game: { isSound } }) => isSound);
-  const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
-  const loading = useSelector(({ game: { isLoading } }) => isLoading);
+  const isSoundOn = useSelector(({ app: { isSound } }) => isSound);
+  const isVisible = useSelector(({ app: { isWelcomeVisible } }) => isWelcomeVisible);
+  const loading = useSelector(({ app: { isLoading } }) => isLoading);
 
   function onContinue() {
-    dispatch(resetIsPlaying());
+    dispatch(toggleWelcomeModal());
   }
 
   function onSoundReset() {
@@ -36,13 +37,13 @@ export default function WelcomeModal() {
 
   function onOptions() {
     dispatch(resetGame());
-    dispatch(resetIsPlaying());
+    dispatch(toggleWelcomeModal());
     dispatch(toggleOptionsModal());
   }
 
   return (
     <Modal
-      show={!isPlay}
+      show={!isVisible}
       animation={false}
       className="welcome-modal"
       centered

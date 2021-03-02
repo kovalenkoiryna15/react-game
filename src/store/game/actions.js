@@ -1,40 +1,21 @@
 import * as c from '~constants';
-import * as t from './actions-constants';
+import * as t from './action-types';
 
+import { showLoader, hideLoader, alertError } from '~store/app/actions';
 import randomizeShips from '~utils';
 import { setLocal, getLocal } from '~utils/localStorage-helpers';
 import getRandomAttack from '~utils/auto-play';
+
+export const resetIsPlaying = () => ({
+  type: t.RESET_IS_PLAYING,
+  payload: undefined,
+});
 
 export const setRandomShipPositions = (
   player, rows,
 ) => ({
   type: t.SET_RANDOM_SHIP_POSITIONS,
   payload: { player, rows },
-});
-
-export const resetSound = () => ({
-  type: t.RESET_SOUND,
-  payload: undefined,
-});
-
-export const toggleRecordsModal = () => ({
-  type: t.TOGGLE_RECORDS_MODAL,
-  payload: undefined,
-});
-
-export const toggleFinishModal = () => ({
-  type: t.TOGGLE_FINISH_MODAL,
-  payload: undefined,
-});
-
-export const toggleOptionsModal = () => ({
-  type: t.TOGGLE_OPTIONS_MODAL,
-  payload: undefined,
-});
-
-export const resetIsPlaying = () => ({
-  type: t.RESET_IS_PLAYING,
-  payload: undefined,
 });
 
 export const resetAutoPlay = () => ({
@@ -44,26 +25,6 @@ export const resetAutoPlay = () => ({
 
 export const resetIsShipNumValid = () => ({
   type: t.RESET_VALID_SHIP_NUM,
-  payload: undefined,
-});
-
-export const refreshBackground = () => ({
-  type: t.REFRESH_BACKGROUND,
-  payload: undefined,
-});
-
-export const selectShipColor = (color) => ({
-  type: t.REFRESH_SHIP_COLOR,
-  payload: { color },
-});
-
-export const showLoader = () => ({
-  type: t.SHOW_LOADER,
-  payload: undefined,
-});
-
-export const hideLoader = () => ({
-  type: t.HIDE_LOADER,
   payload: undefined,
 });
 
@@ -162,16 +123,6 @@ export const readSuccess = () => ({
 
 export const readFailure = () => ({
   type: t.READ_FAILURE,
-  payload: undefined,
-});
-
-export const alertError = (message) => ({
-  type: t.ALERT_MESSAGE,
-  payload: message,
-});
-
-export const clearAlertMessage = () => ({
-  type: t.CLEAR_ALERT_MESSAGE,
   payload: undefined,
 });
 

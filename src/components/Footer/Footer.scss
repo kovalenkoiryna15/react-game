@@ -1,9 +1,3 @@
-@mixin tablet {
-  @media (max-width: 768px) {
-    @content;
-  }
-}
-
 .footer {
   color: #ed044b;
   align-items: center;
@@ -11,20 +5,12 @@
   height: 11%;
   background-color: transparent;
 
-  @include tablet() {
-    height: auto;
-  }
-
   .footer-col {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     text-align: center;
-
-    @include tablet() {
-      margin: 1rem 0;
-    }
   }
 
   .author,
@@ -32,12 +18,14 @@
     color: #ed044b;
     text-decoration: none;
     text-transform: uppercase;
+    border-bottom: 1.2px solid #ed044b;
   }
 
   .author:hover,
   .rsschool-logo:hover {
     color: #ed044b;
-    transform: scale(1.1);
+    text-decoration: none;
+    border-color: transparent;
   }
 
   .rsschool-logo-svg {

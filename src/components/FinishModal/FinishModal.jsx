@@ -9,12 +9,13 @@ import TrophySVG from './TrophySVG';
 import RecordsSVG from '~components/RecordsSVG';
 import NewGameSVG from '~components/NewGameSVG';
 import {
-  toggleFinishModal, resetIsPlaying, toggleRecordsModal, toggleOptionsModal, resetGame,
-} from '~store/game/actions';
+  toggleFinishModal, toggleWelcomeModal, toggleRecordsModal, toggleOptionsModal,
+} from '~store/app/actions';
+import { resetGame } from '~store/game/actions';
 
 export default function FinishModal() {
   const dispatch = useDispatch();
-  const isVisible = useSelector(({ game: { isFinishVisible } }) => isFinishVisible);
+  const isVisible = useSelector(({ app: { isFinishVisible } }) => isFinishVisible);
 
   function onRecords() {
     dispatch(toggleFinishModal());
@@ -23,7 +24,7 @@ export default function FinishModal() {
 
   function onOptions() {
     dispatch(resetGame());
-    dispatch(resetIsPlaying());
+    dispatch(toggleWelcomeModal());
     dispatch(toggleFinishModal());
     dispatch(toggleOptionsModal());
   }

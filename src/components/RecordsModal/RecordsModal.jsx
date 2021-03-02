@@ -9,13 +9,11 @@ import RecordsSVG from '~components/RecordsSVG';
 
 import bgImgUrl from '~images/wallpaper1.jpg';
 
-import {
-  toggleRecordsModal,
-} from '~store/game/actions';
+import { toggleRecordsModal } from '~store/app/actions';
 
 export default function RecordsModal() {
   const dispatch = useDispatch();
-  const isVisible = useSelector(({ game: { isRecordsVisible } }) => isRecordsVisible);
+  const isVisible = useSelector(({ app: { isRecordsVisible } }) => isRecordsVisible);
   const userRecords = useSelector(({ game: { records } }) => records);
 
   function onRecords() {

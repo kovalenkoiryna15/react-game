@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Col, Button, Row } from 'react-bootstrap';
 import './Menu.scss';
 
+import { resetGame, resetAutoPlay } from '~store/game/actions';
 import {
-  resetSound, toggleRecordsModal, refreshBackground, toggleOptionsModal, resetGame, resetAutoPlay,
-} from '~store/game/actions';
+  resetSound, toggleRecordsModal, refreshBackground, toggleOptionsModal,
+} from '~store/app/actions';
 
 import SoundOnSVG from '~components/Sound/SoundOnSVG';
 import SoundOffSVG from '~components/Sound/SoundOffSVG';
@@ -16,8 +17,8 @@ import ImageIcoSVG from '~components/ImageIcoSVG';
 
 export default function Menu() {
   const dispatch = useDispatch();
-  const loading = useSelector(({ game: { isLoading } }) => isLoading);
-  const isSoundOn = useSelector(({ game: { isSound } }) => isSound);
+  const loading = useSelector(({ app: { isLoading } }) => isLoading);
+  const isSoundOn = useSelector(({ app: { isSound } }) => isSound);
 
   function onOptions() {
     dispatch(resetGame()); // reset active player and game progress

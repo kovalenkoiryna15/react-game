@@ -13,8 +13,9 @@ import {
   HERE_IS_FIRE, ATTACK_TIME, HERE_IS_LOSER,
 } from '~constants';
 import {
-  randomPlay, writeLocal, gameOver, toggleFinishModal, saveToRecords,
+  randomPlay, writeLocal, gameOver, saveToRecords,
 } from '~store/game/actions';
+import { toggleFinishModal } from '~store/app/actions';
 
 export default function Game() {
   const dispatch = useDispatch();
@@ -23,9 +24,9 @@ export default function Game() {
   const userAttacks = useSelector(({ game: { [userTurn]: { attacksNum } } }) => attacksNum);
   const isCurrentGameOver = useSelector(({ game: { isGameOver } }) => isGameOver);
   const gameStorageKey = useSelector(({ game: { storageKey } }) => storageKey);
-  const currentBgImageUrl = useSelector(({ game: { bgImageUrl } }) => bgImageUrl);
+  const currentBgImageUrl = useSelector(({ app: { bgImageUrl } }) => bgImageUrl);
   const playersIDs = useSelector(({ game: { players } }) => players);
-  const loading = useSelector(({ game: { isLoading } }) => isLoading);
+  const loading = useSelector(({ app: { isLoading } }) => isLoading);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
   const enemy = +!whoseTurn;
   const enemyBoardState = useSelector(({ game: { [enemy]: { rows } } }) => rows);
@@ -102,10 +103,11 @@ export default function Game() {
   return (
     <Container
       fluid
-      className="d-flex flex-column justify-content-between align-items-center pt-3"
+      className="d-flex flex-column justify-content-between align-items-center pt-1"
       style={{
         minHeight: '100vh',
         background: `center / cover no-repeat url(${currentBgImageUrl})`,
+        overflow: 'hidden',
       }}
     >
       <Row sm={12} xs={12} className="w-100 px-4">
