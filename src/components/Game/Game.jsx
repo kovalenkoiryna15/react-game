@@ -77,7 +77,7 @@ export default function Game() {
     if (isCurrentGameOver) {
       dispatch(toggleFinishModal());
     }
-    return null;
+    return undefined;
   }, [
     playersIDs,
     isAutoPlay,
