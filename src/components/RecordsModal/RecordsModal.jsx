@@ -51,7 +51,7 @@ export default function RecordsModal() {
             {
               userRecords.length
                 ? userRecords.map((record) => (
-                  <Col sm={12} xs={12}>
+                  <Col sm={12} xs={12} key={record.userAttacks}>
                     <Row>
                       <Col>{`${record.userAttacks}`}</Col>
                       <Col>{`${record.date}, ${record.time}`}</Col>

@@ -45,6 +45,7 @@ export default function Game() {
   );
   const enemyFired = useSelector(({ game: { [enemy]: { firedShips } } }) => firedShips);
   const enemyShipCount = useSelector(({ game: { [enemy]: { shipCount } } }) => shipCount);
+  const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
 
   useEffect(() => {
     dispatch(writeLocal({
@@ -58,7 +59,7 @@ export default function Game() {
         dispatch(writeLocal(enemyState, player));
       }
     });
-    if (enemyShipCount !== enemyFired) {
+    if (isPlay && enemyShipCount > enemyFired) {
       if ((isAutoPlay && lastWhoseTurnAttackV === HERE_IS_FIRE)
         || (isAutoPlay && lastEnemyAttackV === HERE_IS_LOSER)) {
         const interval = setTimeout(
@@ -74,11 +75,12 @@ export default function Game() {
         dispatch(saveToRecords({ userAttacks, date, time }));
       }
     }
-    if (isCurrentGameOver) {
+    if (isCurrentGameOver && isPlay) {
       dispatch(toggleFinishModal());
     }
     return undefined;
   }, [
+    isPlay,
     playersIDs,
     isAutoPlay,
     lastWhoseTurnAttackV,

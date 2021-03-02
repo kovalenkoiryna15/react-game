@@ -135,9 +135,9 @@ export const gameOver = () => ({
   payload: undefined,
 });
 
-export const saveToRecords = () => ({
+export const saveToRecords = ({ userAttacks, date, time }) => ({
   type: t.SAVE_TO_RECORDS,
-  payload: undefined,
+  payload: { userAttacks, date, time },
 });
 
 export const validateShipsNum = (miniShip, smallShip, mediumShip, bigShip) => async (dispatch) => {

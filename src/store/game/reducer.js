@@ -208,17 +208,17 @@ const handlers = {
       },
     };
   },
-  [t.SAVE_TO_RECORDS]: (state, { payload }) => {
+  [t.SAVE_TO_RECORDS]: (state, { payload: { userAttacks, date, time } }) => {
     const newRecords = state.records;
     if (!newRecords.length) {
-      newRecords.push(payload);
+      newRecords.push({ userAttacks, date, time });
     }
     if (newRecords <= c.MAX_RECORDS_NUM) {
-      newRecords.unshift(payload);
+      newRecords.unshift({ userAttacks, date, time });
       for (let i = 1; i < newRecords.length; i += 1) {
         const current = newRecords[i];
         let j = i;
-        while (j > 0 && newRecords[j - 1].moves > current.moves) {
+        while (j > 0 && newRecords[j - 1].userAttacks > current.userAttacks) {
           newRecords[j] = newRecords[j - 1];
           j -= 1;
         }

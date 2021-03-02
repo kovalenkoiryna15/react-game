@@ -13,9 +13,11 @@ export default function Board({ player }) {
     <Col md={5} sm={5} xs={12}>
       <Progress player={player} key={player} />
       {
-        Object.entries(boardRows).map(
-          (row) => <BRow player={player} rowNum={row[0]} key={row[0]} cells={row[1]} />,
-        )
+        boardRows
+          ? Object.entries(boardRows).map(
+            (row) => <BRow player={player} rowNum={row[0]} key={row[0]} cells={row[1]} />,
+          )
+          : null
       }
     </Col>
   );
