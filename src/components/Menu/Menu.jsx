@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Col, Button, Row } from 'react-bootstrap';
 import './Menu.scss';
 
+import KeyboardEventHandler from 'react-keyboard-event-handler';
+
 // Music
 import { Howl } from 'howler';
 import playbackMusic from '~audio/BlueSky.mp3';
@@ -74,18 +76,38 @@ export default function Menu() {
               <Button className="w-100 options btn-svg" onClick={onOptions} disabled={loading}>
                 <span>New Game</span>
                 <NewGameSVG />
+                <KeyboardEventHandler
+                  handleKeys={['shift+n']}
+                  onKeyEvent={onAutoPlay}
+                />
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options" onClick={onAutoPlay} disabled={loading}>Auto play</Button>
+              <Button className="w-100 options" onClick={onAutoPlay} disabled={loading}>
+                Auto play
+                <KeyboardEventHandler
+                  handleKeys={['shift+a']}
+                  onKeyEvent={onAutoPlay}
+                />
+              </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options" onClick={onAutoPlay} disabled={loading}>Auto finish</Button>
+              <Button className="w-100 options" onClick={onAutoPlay} disabled={loading}>
+                Auto finish
+                <KeyboardEventHandler
+                  handleKeys={['shift+f']}
+                  onKeyEvent={onAutoPlay}
+                />
+              </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
               <Button className="w-100 options btn-svg" onClick={onRecords} disabled={loading}>
                 <span>Records</span>
                 <RecordsSVG />
+                <KeyboardEventHandler
+                  handleKeys={['shift+r']}
+                  onKeyEvent={onRecords}
+                />
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
@@ -93,6 +115,10 @@ export default function Menu() {
                 <span>Refresh</span>
                 <RefreshSVG />
                 <ImageIcoSVG />
+                <KeyboardEventHandler
+                  handleKeys={['shift+b']}
+                  onKeyEvent={onRefresh}
+                />
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
@@ -101,14 +127,26 @@ export default function Menu() {
                 {
                   isSoundOn ? <SoundOnSVG /> : <SoundOffSVG />
                 }
+                <KeyboardEventHandler
+                  handleKeys={['shift+s']}
+                  onKeyEvent={onSoundReset}
+                />
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options btn-svg" onClick={onMusicReset} disabled={loading}>
+              <Button
+                className="w-100 options btn-svg"
+                onClick={onMusicReset}
+                disabled={loading}
+              >
                 <span>Music</span>
                 {
                   isMusicOn ? <SoundOnSVG /> : <SoundOffSVG />
                 }
+                <KeyboardEventHandler
+                  handleKeys={['shift+m']}
+                  onKeyEvent={onMusicReset}
+                />
               </Button>
             </Col>
           </Row>
