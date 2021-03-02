@@ -3,7 +3,6 @@ import * as t from './action-types';
 
 import { showLoader, hideLoader, alertError } from '~store/app/actions';
 import randomizeShips from '~utils';
-import { setLocal, getLocal } from '~utils/localStorage-helpers';
 import getRandomAttack from '~utils/auto-play';
 
 export const resetIsPlaying = () => ({
@@ -151,12 +150,9 @@ export const validateShipsNum = (miniShip, smallShip, mediumShip, bigShip) => as
 };
 
 export const writeLocal = (state, id) => async (dispatch) => {
-  try {
-    await setLocal(state, id);
-    dispatch(writeSuccess());
-  } catch {
-    dispatch(writeFailure());
-  }
+  localStorage.removeItem(`${id}-battleship`);
+  localStorage.setItem(`${id}-battleship`, JSON.stringify(state));
+  dispatch(writeSuccess());
 };
 
 export const setPlayerState = (player, newState) => ({
@@ -165,15 +161,14 @@ export const setPlayerState = (player, newState) => ({
 });
 
 export const readLocalPlayerState = (player) => async (dispatch) => {
-  try {
-    const response = await getLocal(player);
-    const { game } = await response.json();
-    dispatch(setPlayerState(player, game[player]));
-    dispatch(readSuccess());
-  } catch (error) {
+  const localState = localStorage.getItem(`${player}-battleship`);
+  if (!localState) {
     dispatch(readFailure());
-    dispatch(alertError(error.toString()));
+    dispatch(alertError('You have not any started game. Please start new game.'));
   }
+  const data = JSON.parse(localState);
+  dispatch(setPlayerState(player, data));
+  dispatch(readSuccess());
 };
 
 export const setGameState = (state) => ({
@@ -182,13 +177,12 @@ export const setGameState = (state) => ({
 });
 
 export const readLocalGameState = (key) => async (dispatch) => {
-  try {
-    const response = await getLocal(key);
-    const { game } = await response.json();
-    dispatch(setGameState(game[key]));
-    dispatch(readSuccess());
-  } catch (error) {
+  const localState = localStorage.getItem(`${key}-battleship`);
+  if (!localState) {
     dispatch(readFailure());
-    dispatch(alertError(error.toString()));
+    dispatch(alertError('You have not any started game. Please start new game.'));
   }
+  const data = JSON.parse(localState);
+  dispatch(setGameState(data));
+  dispatch(readSuccess());
 };

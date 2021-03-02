@@ -7,10 +7,8 @@ import { Button } from 'react-bootstrap';
 
 // Sound
 import { Howl } from 'howler';
-import shipExplosion from '~audio/ship-explosion.wav';
-import laser from '~audio/laser.mp3';
 
-import { HERE_IS_FIRE } from '~constants';
+import { HERE_IS_FIRE, audioSrs } from '~constants';
 import {
   getHit, countAttacks, countFired, resetLife,
 } from '~store/game/actions';
@@ -32,10 +30,10 @@ export default function Ship({
   const isSoundOn = useSelector(({ app: { isSound } }) => isSound);
   const userTurn = useSelector(({ game: { user } }) => user);
   const soundLaser = useMemo(() => new Howl({
-    src: [laser],
+    src: [audioSrs.laser],
   }), []);
   const soundExplosion = useMemo(() => new Howl({
-    src: [shipExplosion],
+    src: [audioSrs.shipExplosion],
   }), []);
 
   const soundCall = useCallback(

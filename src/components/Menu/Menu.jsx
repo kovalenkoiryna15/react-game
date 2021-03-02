@@ -8,7 +8,7 @@ import KeyboardEventHandler from 'react-keyboard-event-handler';
 
 // Music
 import { Howl } from 'howler';
-import playbackMusic from '~audio/BlueSky.mp3';
+import { audioSrs } from '~constants';
 
 import { resetGame, resetAutoPlay } from '~store/game/actions';
 import {
@@ -36,7 +36,7 @@ export default function Menu() {
   // const musicVolumeValue = useSelector(({ app: { musicVolume } }) => musicVolume);
   // const soundVolumeValue = useSelector(({ app: { soundVolume } }) => soundVolume);
   const playback = useMemo(() => new Howl({
-    src: [playbackMusic],
+    src: [audioSrs.playbackMusic],
     loop: true,
   }), []);
 

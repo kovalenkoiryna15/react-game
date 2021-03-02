@@ -7,9 +7,8 @@ import { Button } from 'react-bootstrap';
 
 // Sound
 import { Howl } from 'howler';
-import laser from '~audio/laser.mp3';
 
-import { HERE_IS_LOSER, ATTACK_TIME } from '~constants';
+import { HERE_IS_LOSER, ATTACK_TIME, audioSrs } from '~constants';
 import { missHit, countAttacks, randomPlay } from '~store/game/actions';
 
 export default function See({
@@ -29,7 +28,7 @@ export default function See({
   const isGameStarted = useSelector(({ game: { isPlaying } }) => isPlaying);
   const isSoundOn = useSelector(({ app: { isSound } }) => isSound);
   const soundLaser = useMemo(() => new Howl({
-    src: [laser],
+    src: [audioSrs.laser],
   }), []);
 
   const soundCall = useCallback(

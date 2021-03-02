@@ -4,7 +4,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const ASSET_PATH = process.env.ASSET_PATH || '/';
+const ASSET_PATH = process.env.ASSET_PATH || '';
 
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
@@ -70,7 +70,7 @@ module.exports = (env, options) => {
               loader: 'file-loader',
               options: {
                 name: '[name].[ext]',
-                outputPath: './assets/audio/',
+                outputPath: 'assets/audio/',
               },
             },
           ],

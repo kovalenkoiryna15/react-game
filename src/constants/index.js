@@ -4,6 +4,17 @@ import bg2 from '~images/wp1814943.jpg';
 import bg6 from '~images/wp1814971.jpg';
 import bg11 from '~images/wallpaper1.jpg';
 
+// AUDIO
+import shipExplosion from '~audio/ship-explosion.wav';
+import laser from '~audio/laser.mp3';
+import playbackMusic from '~audio/BlueSky.mp3';
+
+export const audioSrs = {
+  laser,
+  shipExplosion,
+  playbackMusic,
+};
+
 // PLAYERS
 export const PLAYER1_NAME = 'Guardians of the Galaxy';
 export const PLAYER2_NAME = 'Ronan\'s flagship';
