@@ -69,6 +69,7 @@
     "bootstrap": "^4.6.0",
     "bootswatch": "^4.6.0",
     "firebase": "^8.2.7",
+    "howler": "^2.2.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",

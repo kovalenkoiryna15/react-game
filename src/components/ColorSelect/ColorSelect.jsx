@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import './ColorSelect.scss';
 
-import { selectShipColor } from '~store/game/actions';
+import { selectShipColor } from '~store/app/actions';
 
 const colourOptions = [
   { value: 'blue', label: 'Blue', color: '#0052CC' },
@@ -50,7 +50,7 @@ const colourStyles = {
 
 const ColorSelect = () => {
   const dispatch = useDispatch();
-  const colorShip = useSelector(({ game: { shipColor } }) => shipColor);
+  const colorShip = useSelector(({ app: { shipColor } }) => shipColor);
 
   function onColorSelect(value) {
     const { color } = value;

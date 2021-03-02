@@ -14,13 +14,12 @@ import RangeInput from '~components/RangeInput';
 import ColorSelect from '~components/ColorSelect';
 
 import * as c from '~constants';
-import {
-  toggleOptionsModal, setRandom, validateShipsNum, clearAlertMessage, resetIsShipNumValid,
-} from '~store/game/actions';
+import { setRandom, validateShipsNum, resetIsShipNumValid } from '~store/game/actions';
+import { toggleOptionsModal, clearAlertMessage } from '~store/app/actions';
 
 export default function OptionsModal() {
   const dispatch = useDispatch();
-  const isVisible = useSelector(({ game: { isOptionsVisible } }) => isOptionsVisible);
+  const isVisible = useSelector(({ app: { isOptionsVisible } }) => isOptionsVisible);
   const playersIDs = useSelector(({ game: { players } }) => players);
   const maxNumMiniShip = useSelector(({ game: { [c.TYPE_MINI_SHIP]: { max } } }) => max);
   const maxNumSmallShip = useSelector(({ game: { [c.TYPE_SMALL_SHIP]: { max } } }) => max);
@@ -35,7 +34,7 @@ export default function OptionsModal() {
   const typeMediumShip = useSelector(({ game: { [c.TYPE_MEDIUM_SHIP]: { type } } }) => type);
   const typeBigShip = useSelector(({ game: { [c.TYPE_BIG_SHIP]: { type } } }) => type);
   const isValid = useSelector(({ game: { isShipNumValid } }) => isShipNumValid);
-  const alertMessage = useSelector(({ game: { alert } }) => alert);
+  const alertMessage = useSelector(({ app: { alert } }) => alert);
 
   function onOptions() {
     dispatch(toggleOptionsModal());

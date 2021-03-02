@@ -1,4 +1,4 @@
-import * as t from './actions-constants';
+import * as t from './action-types';
 import * as c from '~constants';
 
 /*
@@ -6,6 +6,7 @@ import * as c from '~constants';
 */
 
 const initialState = {
+  isPlaying: false,
   size: c.BOARD_SIZE,
   shipCount: c.MAX_SHIP_COUNT,
   [c.TYPE_MINI_SHIP]: {
@@ -57,20 +58,10 @@ const initialState = {
     shipCount: c.MAX_SHIP_COUNT,
     firedShips: 0,
   },
-  isLoading: false,
   activePlayer: c.PLAYER1,
   user: c.PLAYER1,
-  alert: undefined,
   storageKey: c.GAME_STORAGE_KEY,
-  isSound: true,
-  isPlaying: false,
-  isRecordsVisible: false,
-  isFinishVisible: false,
-  isOptionsVisible: false,
   isShipNumValid: false,
-  shipColor: c.DEFAULT_SHIP_COLOR,
-  bgImageUrl: c.DEFAULT_BACKGROUND_IMAGE_URL,
-  bgUrls: c.BG_URLS,
   isGameOver: false,
   records: [],
 };
@@ -80,6 +71,10 @@ const initialState = {
 */
 
 const handlers = {
+  [t.RESET_IS_PLAYING]: (state) => ({
+    ...state,
+    isPlaying: !state.isPlaying,
+  }),
   [t.SET_RANDOM_SHIP_POSITIONS]: (state, { payload: { rows, player } }) => ({
     ...state,
     [player]: {
@@ -142,8 +137,10 @@ const handlers = {
     },
   }) => {
     let newActivePlayer = enemy;
+    let newFiredShips = state[enemy].firedShips;
     if (value === c.HERE_IS_FIRE) {
       newActivePlayer = +!enemy;
+      newFiredShips += 1;
     }
     return {
       ...state,
@@ -156,6 +153,7 @@ const handlers = {
             [id]: value,
           },
         },
+        firedShips: newFiredShips,
       },
       [+!enemy]: {
         ...state[+!enemy],
@@ -166,14 +164,6 @@ const handlers = {
       activePlayer: newActivePlayer,
     };
   },
-  [t.ALERT_MESSAGE]: (state, { payload }) => ({
-    ...state,
-    alert: payload,
-  }),
-  [t.CLEAR_ALERT_MESSAGE]: (state) => ({
-    ...state,
-    alert: '',
-  }),
   [t.RESET_VALID_SHIP_NUM]: (state, { payload }) => ({
     ...state,
     isShipNumValid: !state.isShipNumValid,
@@ -185,18 +175,6 @@ const handlers = {
       ...state[c.PLAYER2],
       shipCount: payload,
     },
-  }),
-  [t.HIDE_LOADER]: (state) => ({
-    ...state,
-    isLoading: false,
-  }),
-  [t.SHOW_LOADER]: (state) => ({
-    ...state,
-    isLoading: true,
-  }),
-  [t.RESET_IS_PLAYING]: (state) => ({
-    ...state,
-    isPlaying: !state.isPlaying,
   }),
   [t.RESET_AUTO_PLAY]: (state) => ({
     ...state,
@@ -216,34 +194,10 @@ const handlers = {
       num: value,
     },
   }),
-  [t.TOGGLE_RECORDS_MODAL]: (state) => ({
-    ...state,
-    isRecordsVisible: !state.isRecordsVisible,
-  }),
-  [t.TOGGLE_FINISH_MODAL]: (state) => ({
-    ...state,
-    isFinishVisible: !state.isFinishVisible,
-  }),
-  [t.TOGGLE_OPTIONS_MODAL]: (state) => ({
-    ...state,
-    isOptionsVisible: !state.isOptionsVisible,
-  }),
   [t.RESET_ACTIVE_PLAYER]: (state) => ({
     ...state,
     activePlayer: c.PLAYER1,
   }),
-  [t.REFRESH_BACKGROUND]: (state) => {
-    const currentIndex = state.bgUrls.indexOf(state.bgImageUrl);
-    let urlIndex = currentIndex + 1;
-    if (urlIndex === state.bgUrls.length) {
-      urlIndex = 0;
-    }
-    const url = state.bgUrls[urlIndex];
-    return {
-      ...state,
-      bgImageUrl: url,
-    };
-  },
   [t.RESET_LIFE]: (state, { payload: { player, fired } }) => {
     const newLife = ((state.shipCount - fired) * 100) / state.shipCount;
     return {
@@ -279,10 +233,6 @@ const handlers = {
       records: newRecords,
     };
   },
-  [t.REFRESH_SHIP_COLOR]: (state, { payload: { color } }) => ({
-    ...state,
-    shipColor: color,
-  }),
   [t.RESET_PROGRESS]: (state) => ({
     ...state,
     isGameOver: false,
