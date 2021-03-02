@@ -4,6 +4,7 @@ import {
   Col, Button, Row, Modal, Container,
 } from 'react-bootstrap';
 import './WelcomeModal.scss';
+
 import bgImgUrl from '~images/wp1814937.jpg';
 
 import Footer from '~components/Footer';
@@ -12,7 +13,7 @@ import SoundOffSVG from '~components/Sound/SoundOffSVG';
 import RecordsSVG from '~components/RecordsSVG';
 import NewGameSVG from '~components/NewGameSVG';
 
-import { resetGame } from '~store/game/actions';
+import { resetGame, resetIsPlaying } from '~store/game/actions';
 import {
   toggleWelcomeModal, resetSound, toggleRecordsModal, toggleOptionsModal,
 } from '~store/app/actions';
@@ -24,6 +25,7 @@ export default function WelcomeModal() {
   const loading = useSelector(({ app: { isLoading } }) => isLoading);
 
   function onContinue() {
+    dispatch(resetIsPlaying());
     dispatch(toggleWelcomeModal());
   }
 

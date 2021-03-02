@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import './See.scss';
@@ -17,6 +17,7 @@ export default function See({
 }) {
   const classes = `content see ${value === HERE_IS_LOSER ? 'lose' : ''}`;
   const dispatch = useDispatch();
+  const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
   const userBoard = useSelector(({ game: { user } }) => user);
   const enemy = +!whoseTurn;
@@ -25,13 +26,45 @@ export default function See({
   const lastAttacks = useSelector(({ game: { [enemy]: { attacks } } }) => attacks);
   const userTurn = useSelector(({ game: { user } }) => user);
   const isAutoPlay = useSelector(({ game: { [userTurn]: { autoPlay } } }) => autoPlay);
+  const isGameStarted = useSelector(({ game: { isPlaying } }) => isPlaying);
+  const isSoundOn = useSelector(({ app: { isSound } }) => isSound);
+  const soundLaser = useMemo(() => new Howl({
+    src: [laser],
+  }), []);
+
+  const soundCall = useCallback(
+    () => {
+      if (player === userBoard
+        && value === HERE_IS_LOSER
+        && isSoundOn
+        && isGameStarted
+        && isPlay
+        && userTurn !== whoseTurn
+      ) {
+        soundLaser.play();
+      }
+    }, [
+      isGameStarted,
+      isSoundOn,
+      value,
+      player,
+      userBoard,
+      userTurn,
+      whoseTurn,
+      soundLaser,
+      isPlay,
+    ],
+  );
 
   function onAttack() {
-    // Sound
-    const sound = new Howl({
-      src: [laser],
-    });
-    sound.play();
+    if (player !== userBoard
+      && value === HERE_IS_LOSER
+      && isSoundOn
+      && isPlay
+      && isGameStarted
+    ) {
+      soundLaser.play();
+    }
     dispatch(countAttacks(whoseTurn));
     dispatch(missHit(id, num, player));
     const interval = setTimeout(
@@ -40,15 +73,7 @@ export default function See({
     return () => clearInterval(interval);
   }
 
-  useEffect(() => {
-    if (player === userBoard && value === HERE_IS_LOSER) {
-      // Sound
-      const sound = new Howl({
-        src: [laser],
-      });
-      sound.play();
-    }
-  }, [value, player, userBoard, dispatch]);
+  useEffect(() => soundCall(), [soundCall]);
 
   return (
     <Button

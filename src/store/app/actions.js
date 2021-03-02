@@ -5,6 +5,11 @@ export const resetSound = () => ({
   payload: undefined,
 });
 
+export const resetMusic = () => ({
+  type: t.RESET_MUSIC,
+  payload: undefined,
+});
+
 export const toggleWelcomeModal = () => ({
   type: t.TOGGLE_WELCOME_MODAL,
   payload: undefined,
