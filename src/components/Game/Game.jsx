@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Board from '~components/Board';
 import Menu from '~components/Menu';
 import Footer from '~components/Footer';
+import FullScreen from '~components/FullScreen';
 
 import getDateTime from '~utils/getDateTime';
 
@@ -101,32 +102,34 @@ export default function Game() {
   ]);
 
   return (
-    <Container
-      fluid
-      className="d-flex flex-column justify-content-between align-items-center pt-1"
-      style={{
-        minHeight: '100vh',
-        background: `center / cover no-repeat url(${currentBgImageUrl})`,
-        overflow: 'hidden',
-      }}
-    >
-      <Row sm={12} xs={12} className="w-100 px-4">
-        <Menu />
-        {
-          loading
-            ? (
-              <div>Loading...</div>
-            )
-            : (
-              <>
-                {
-                  playersIDs.map((player) => <Board player={player} key={player} />)
-                }
-              </>
-            )
-        }
-      </Row>
-      <Footer />
-    </Container>
+    <FullScreen>
+      <Container
+        fluid
+        className="d-flex flex-column justify-content-between align-items-center pt-1"
+        style={{
+          minHeight: '100vh',
+          background: `center / cover no-repeat url(${currentBgImageUrl})`,
+          overflow: 'hidden',
+        }}
+      >
+        <Row sm={12} xs={12} className="w-100 px-4">
+          <Menu />
+          {
+            loading
+              ? (
+                <div>Loading...</div>
+              )
+              : (
+                <>
+                  {
+                    playersIDs.map((player) => <Board player={player} key={player} />)
+                  }
+                </>
+              )
+          }
+        </Row>
+        <Footer />
+      </Container>
+    </FullScreen>
   );
 }
