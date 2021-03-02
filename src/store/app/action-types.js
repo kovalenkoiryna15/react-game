@@ -8,6 +8,7 @@ export const SHOW_LOADER = 'APP/SHOW_LOADER';
 
 // Sound & Music
 export const RESET_SOUND = 'APP/RESET_SOUND';
+export const RESET_MUSIC = 'APP/RESET_MUSIC';
 
 // Modals
 export const TOGGLE_WELCOME_MODAL = 'APP/TOGGLE_WELCOME_MODAL';

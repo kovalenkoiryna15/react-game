@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import './Ship.scss';
@@ -21,42 +21,66 @@ export default function Ship({
   id, num, player, value,
 }) {
   const dispatch = useDispatch();
+  const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
   const userBoard = useSelector(({ game: { user } }) => user);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
   const classes = `content ship ${value === HERE_IS_FIRE ? 'fired' : ''}`;
   const colorShip = useSelector(({ app: { shipColor } }) => shipColor);
   const isAutoPlay = useSelector(({ game: { [userBoard]: { autoPlay } } }) => autoPlay);
   const fired = useSelector(({ game: { [player]: { firedShips } } }) => firedShips);
+  const isGameStarted = useSelector(({ game: { isPlaying } }) => isPlaying);
+  const isSoundOn = useSelector(({ app: { isSound } }) => isSound);
+  const userTurn = useSelector(({ game: { user } }) => user);
+  const soundLaser = useMemo(() => new Howl({
+    src: [laser],
+  }), []);
+  const soundExplosion = useMemo(() => new Howl({
+    src: [shipExplosion],
+  }), []);
+
+  const soundCall = useCallback(
+    () => {
+      if (player === userBoard
+        && value === HERE_IS_FIRE
+        && isSoundOn
+        && isPlay
+        && isGameStarted
+        && userTurn !== whoseTurn
+      ) {
+        soundLaser.play();
+        soundExplosion.play();
+      }
+    }, [
+      isGameStarted,
+      isSoundOn,
+      value,
+      player,
+      userBoard,
+      userTurn,
+      whoseTurn,
+      soundLaser,
+      soundExplosion,
+      isPlay,
+    ],
+  );
 
   function onAttack() {
-    // Sound
-    const sound1 = new Howl({
-      src: [laser],
-    });
-    sound1.play();
-    const sound2 = new Howl({
-      src: [shipExplosion],
-    });
-    sound2.play();
+    if (player !== userBoard
+      && value === HERE_IS_FIRE
+      && isSoundOn
+      && isPlay
+      && isGameStarted
+    ) {
+      soundLaser.play();
+      soundExplosion.play();
+    }
     dispatch(countAttacks(whoseTurn));
     dispatch(countFired(player));
     dispatch(resetLife({ player, fired }));
     dispatch(getHit(id, num, player));
   }
 
-  useEffect(() => {
-    if (player === userBoard && value === HERE_IS_FIRE) {
-      // Sound
-      const sound1 = new Howl({
-        src: [laser],
-      });
-      sound1.play();
-      const sound2 = new Howl({
-        src: [shipExplosion],
-      });
-      sound2.play();
-    }
-  }, [value, player, userBoard, fired, dispatch]);
+  useEffect(() => soundCall(), [soundCall]);
 
   return (
     <Button

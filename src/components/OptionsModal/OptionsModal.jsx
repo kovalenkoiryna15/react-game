@@ -14,7 +14,9 @@ import RangeInput from '~components/RangeInput';
 import ColorSelect from '~components/ColorSelect';
 
 import * as c from '~constants';
-import { setRandom, validateShipsNum, resetIsShipNumValid } from '~store/game/actions';
+import {
+  setRandom, validateShipsNum, resetIsShipNumValid, resetIsPlaying,
+} from '~store/game/actions';
 import { toggleOptionsModal, clearAlertMessage } from '~store/app/actions';
 
 export default function OptionsModal() {
@@ -49,6 +51,7 @@ export default function OptionsModal() {
       playersIDs.forEach((player) => dispatch(
         setRandom(player, numMiniShip, numSmallShip, numMediumShip, numBigShip),
       ));
+      dispatch(resetIsPlaying());
       dispatch(clearAlertMessage());
       dispatch(resetIsShipNumValid());
       dispatch(toggleOptionsModal());

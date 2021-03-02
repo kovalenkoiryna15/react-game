@@ -9,6 +9,7 @@ const initialState = {
   isLoading: false,
   alert: undefined,
   isSound: true,
+  isMusic: true,
   isWelcomeVisible: false,
   isRecordsVisible: false,
   isFinishVisible: false,
@@ -54,6 +55,14 @@ const handlers = {
   [t.TOGGLE_OPTIONS_MODAL]: (state) => ({
     ...state,
     isOptionsVisible: !state.isOptionsVisible,
+  }),
+  [t.RESET_SOUND]: (state) => ({
+    ...state,
+    isSound: !state.isSound,
+  }),
+  [t.RESET_MUSIC]: (state) => ({
+    ...state,
+    isMusic: !state.isMusic,
   }),
   [t.REFRESH_BACKGROUND]: (state) => {
     const currentIndex = state.bgUrls.indexOf(state.bgImageUrl);
