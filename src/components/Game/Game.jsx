@@ -14,7 +14,7 @@ import {
   HERE_IS_FIRE, ATTACK_TIME, HERE_IS_LOSER,
 } from '~constants';
 import {
-  randomPlay, writeLocal, gameOver, saveToRecords, countFired, resetLife,
+  randomPlay, writeLocal, gameOver, saveToRecords,
 } from '~store/game/actions';
 import { toggleFinishModal } from '~store/app/actions';
 
