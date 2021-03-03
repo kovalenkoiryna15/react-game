@@ -8,8 +8,9 @@ import * as c from '~constants';
 const initialState = {
   isLoading: false,
   alert: '',
-  isSound: true,
-  isMusic: true,
+  isSound: false,
+  isMusic: false,
+  isInfoVisible: false,
   isWelcomeVisible: false,
   isRecordsVisible: false,
   isFinishVisible: false,
@@ -49,6 +50,10 @@ const handlers = {
   [t.TOGGLE_RECORDS_MODAL]: (state) => ({
     ...state,
     isRecordsVisible: !state.isRecordsVisible,
+  }),
+  [t.TOGGLE_INFO_MODAL]: (state) => ({
+    ...state,
+    isInfoVisible: !state.isInfoVisible,
   }),
   [t.TOGGLE_FINISH_MODAL]: (state) => ({
     ...state,

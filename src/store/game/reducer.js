@@ -137,9 +137,11 @@ const handlers = {
   }) => {
     let newActivePlayer = enemy;
     let newFiredShips = state[enemy].firedShips;
+    let newLife = state[enemy].progress;
     if (value === c.HERE_IS_FIRE) {
       newActivePlayer = +!enemy;
       newFiredShips += 1;
+      newLife = ((state.actualShipNum - newFiredShips) * 100) / state.actualShipNum;
     }
     return {
       ...state,
@@ -153,6 +155,7 @@ const handlers = {
           },
         },
         firedShips: newFiredShips,
+        progress: newLife,
       },
       [+!enemy]: {
         ...state[+!enemy],
@@ -186,7 +189,7 @@ const handlers = {
     ...state,
     [type]: {
       ...state[type],
-      num: value,
+      num: Number(value),
     },
   }),
   [t.RESET_ACTIVE_PLAYER]: (state) => ({
@@ -194,7 +197,8 @@ const handlers = {
     activePlayer: c.PLAYER1,
   }),
   [t.RESET_LIFE]: (state, { payload: { player, fired } }) => {
-    const newLife = ((state.actualShipNum - fired) * 100) / state.actualShipNum;
+    const newFired = fired + 1;
+    const newLife = ((state.actualShipNum - newFired) * 100) / state.actualShipNum;
     return {
       ...state,
       [player]: {
@@ -258,7 +262,7 @@ const handlers = {
     [c.PLAYER1]: {
       ...state[c.PLAYER1],
       rows: {},
-      name: c.PLAYER2_NAME,
+      name: c.PLAYER1_NAME,
       attacks: Array(0),
       attacksNum: 0,
       firedShips: 0,
@@ -269,6 +273,7 @@ const handlers = {
     },
     [c.PLAYER2]: {
       ...state[c.PLAYER2],
+      rows: {},
       name: c.PLAYER2_NAME,
       attacks: Array(0),
       attacksNum: 0,

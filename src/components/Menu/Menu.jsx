@@ -1,24 +1,21 @@
 import * as React from 'react';
-import { useMemo, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Button, Row } from 'react-bootstrap';
 import './Menu.scss';
 
 import KeyboardEventHandler from 'react-keyboard-event-handler';
 
-// Music
-import { Howl } from 'howler';
-import { audioSrs } from '~constants';
-
 import { resetGame, resetAutoPlay } from '~store/game/actions';
 import {
   resetSound,
   toggleRecordsModal,
+  toggleInfoModal,
   refreshBackground,
   toggleOptionsModal,
   resetMusic,
-  // resetMusicVolume,
-  // resetSoundVolume,
+  resetMusicVolume,
+  resetSoundVolume,
 } from '~store/app/actions';
 
 import SoundOnSVG from '~components/Sound/SoundOnSVG';
@@ -28,25 +25,33 @@ import NewGameSVG from '~components/NewGameSVG';
 import RefreshSVG from '~components/RefreshSVG';
 import ImageIcoSVG from '~components/ImageIcoSVG';
 
+// Music
+import { audioSrs } from '~constants';
+
+const playback = new Audio(audioSrs.playbackMusic);
+playback.loop = true;
+
 export default function Menu() {
   const dispatch = useDispatch();
-  const loading = useSelector(({ app: { isLoading } }) => isLoading);
   const isSoundOn = useSelector(({ app: { isSound } }) => isSound);
   const isMusicOn = useSelector(({ app: { isMusic } }) => isMusic);
-  // const musicVolumeValue = useSelector(({ app: { musicVolume } }) => musicVolume);
-  // const soundVolumeValue = useSelector(({ app: { soundVolume } }) => soundVolume);
-  const playback = useMemo(() => new Howl({
-    src: [audioSrs.playbackMusic],
-    loop: true,
-  }), []);
+  const userTurn = useSelector(({ game: { user } }) => user);
+  const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
+  const musicVolumeValue = useSelector(({ app: { musicVolume } }) => musicVolume);
+  const soundVolumeValue = useSelector(({ app: { soundVolume } }) => soundVolume);
+  playback.volume = musicVolumeValue;
 
   function onOptions() {
-    dispatch(resetGame()); // reset active player and game progress
+    dispatch(resetGame());
     dispatch(toggleOptionsModal());
   }
 
   function onSoundReset() {
     dispatch(resetSound());
+  }
+
+  function onInfo() {
+    dispatch(toggleInfoModal());
   }
 
   function onRecords() {
@@ -69,19 +74,19 @@ export default function Menu() {
     if (isMusicOn) {
       playback.play();
     } else {
-      playback.stop();
+      playback.pause();
     }
-  }, [isMusicOn, playback]);
+  }, [isMusicOn, userTurn, whoseTurn]);
 
-  // function onMusicVolume(e) {
-  //   const { value } = e.target;
-  //   dispatch(resetMusicVolume(parseFloat(value)));
-  // }
+  function onMusicVolume(e) {
+    const { value } = e.target;
+    dispatch(resetMusicVolume(+value));
+  }
 
-  // function onSoundVolume(e) {
-  //   const { value } = e.target;
-  //   dispatch(resetSoundVolume(parseFloat(value)));
-  // }
+  function onSoundVolume(e) {
+    const { value } = e.target;
+    dispatch(resetSoundVolume(+value));
+  }
 
   return (
     <Col lg={2} md={12} sm={12} xs={12} className="menu">
@@ -92,17 +97,17 @@ export default function Menu() {
           </Row>
           <Row>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options btn-svg" onClick={onOptions} disabled={loading}>
+              <Button className="w-100 options btn-svg" onClick={onOptions}>
                 <span>New Game</span>
                 <NewGameSVG />
                 <KeyboardEventHandler
                   handleKeys={['shift+n']}
-                  onKeyEvent={onAutoPlay}
+                  onKeyEvent={onOptions}
                 />
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options" onClick={onAutoPlay} disabled={loading}>
+              <Button className="w-100 options" onClick={onAutoPlay}>
                 Auto play
                 <KeyboardEventHandler
                   handleKeys={['shift+a']}
@@ -111,7 +116,7 @@ export default function Menu() {
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options" onClick={onAutoPlay} disabled={loading}>
+              <Button className="w-100 options" onClick={onAutoPlay}>
                 Auto finish
                 <KeyboardEventHandler
                   handleKeys={['shift+f']}
@@ -120,7 +125,7 @@ export default function Menu() {
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options btn-svg" onClick={onRecords} disabled={loading}>
+              <Button className="w-100 options btn-svg" onClick={onRecords}>
                 <span>Records</span>
                 <RecordsSVG />
                 <KeyboardEventHandler
@@ -130,7 +135,7 @@ export default function Menu() {
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options btn-svg" onClick={onRefresh} disabled={loading}>
+              <Button className="w-100 options btn-svg" onClick={onRefresh}>
                 <span>Refresh</span>
                 <RefreshSVG />
                 <ImageIcoSVG />
@@ -141,7 +146,7 @@ export default function Menu() {
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options btn-svg" onClick={onSoundReset} disabled={loading}>
+              <Button className="w-100 options btn-svg" onClick={onSoundReset}>
                 <span>Sound</span>
                 {
                   isSoundOn ? <SoundOnSVG /> : <SoundOffSVG />
@@ -153,10 +158,23 @@ export default function Menu() {
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
+              <span>Sound Volume</span>
+              <input
+                type="range"
+                value={soundVolumeValue}
+                min="0"
+                max={1}
+                step="0.001"
+                list="options"
+                onChange={onSoundVolume}
+                className="custom-range range__input"
+                id="sound-volume-range"
+              />
+            </Col>
+            <Col lg={12} md={6} sm={12} xs={12}>
               <Button
                 className="w-100 options btn-svg"
                 onClick={onMusicReset}
-                disabled={loading}
               >
                 <span>Music</span>
                 {
@@ -168,7 +186,8 @@ export default function Menu() {
                 />
               </Button>
             </Col>
-            {/* <Col lg={12} md={6} sm={12} xs={12}>
+            <Col lg={12} md={6} sm={12} xs={12}>
+              <span>Music Volume</span>
               <input
                 type="range"
                 value={musicVolumeValue}
@@ -176,24 +195,20 @@ export default function Menu() {
                 max={1}
                 step="0.001"
                 list="options"
-                onInput={onMusicVolume}
+                onChange={onMusicVolume}
                 className="custom-range range__input"
                 id="music-volume-range"
               />
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <input
-                type="range"
-                value={soundVolumeValue}
-                min="0"
-                max={1}
-                step="0.001"
-                list="options"
-                onInput={onSoundVolume}
-                className="custom-range range__input"
-                id="sound-volume-range"
-              />
-            </Col> */}
+              <Button className="w-100 options btn-svg" onClick={onInfo}>
+                <span>Info</span>
+                <KeyboardEventHandler
+                  handleKeys={['shift+i']}
+                  onKeyEvent={onInfo}
+                />
+              </Button>
+            </Col>
           </Row>
         </Col>
       </Row>

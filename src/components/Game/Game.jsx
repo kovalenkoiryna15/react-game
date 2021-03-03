@@ -14,7 +14,7 @@ import {
   HERE_IS_FIRE, ATTACK_TIME, HERE_IS_LOSER,
 } from '~constants';
 import {
-  randomPlay, writeLocal, gameOver, saveToRecords,
+  randomPlay, writeLocal, gameOver, saveToRecords, countFired, resetLife,
 } from '~store/game/actions';
 import { toggleFinishModal } from '~store/app/actions';
 
@@ -46,14 +46,21 @@ export default function Game() {
   const enemyFired = useSelector(({ game: { [enemy]: { firedShips } } }) => firedShips);
   const actualCellShipCount = useSelector(({ game: { actualShipNum } }) => actualShipNum);
   const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
+  const fired = useSelector(({ game: { [enemy]: { firedShips } } }) => firedShips);
 
   useEffect(() => {
+    // SAVE TO LOCAL STORAGE GAME STATE
     dispatch(
       writeLocal({
-        size: boardSize, activePlayer: whoseTurn, records: userRecords,
+        isGameOver: isCurrentGameOver,
+        size: boardSize,
+        activePlayer: whoseTurn,
+        records: userRecords,
+        actualShipNum: actualCellShipCount,
       },
       gameStorageKey),
     );
+    // SAVE TO LOCAL STORAGE PLAYERS STATE
     playersIDs.forEach((player) => {
       if (player === whoseTurn) {
         dispatch(writeLocal(whoseTurnState, player));
@@ -62,6 +69,8 @@ export default function Game() {
         dispatch(writeLocal(enemyState, player));
       }
     });
+    // CHECK IS GAME OVER
+    // CONTINUE AUTOPLAY
     if (isPlay && actualCellShipCount > enemyFired) {
       if ((isAutoPlay && lastWhoseTurnAttackV === HERE_IS_FIRE)
         || (isAutoPlay && lastEnemyAttackV === HERE_IS_LOSER)) {
@@ -71,18 +80,21 @@ export default function Game() {
         return () => clearInterval(interval);
       }
     }
-    if (isPlay && actualCellShipCount === enemyFired) {
+    // GAME IS OVER
+    if (isPlay && enemyFired && actualCellShipCount === enemyFired) {
       dispatch(gameOver());
       if (userTurn === whoseTurn && userAttacks) {
         const { date, time } = getDateTime();
         dispatch(saveToRecords({ userAttacks, date, time }));
       }
     }
-    if (isCurrentGameOver && isPlay) {
+    // TOGGLE FINISH MODAL
+    if (isPlay && isCurrentGameOver) {
       dispatch(toggleFinishModal());
     }
     return undefined;
   }, [
+    fired,
     isPlay,
     playersIDs,
     isAutoPlay,

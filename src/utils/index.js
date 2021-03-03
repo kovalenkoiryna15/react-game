@@ -284,10 +284,9 @@ export default function randomizeShips(size, numMiniShip, numSmallShip, numMediu
   let rows = createEmptyRows(size, cols);
   const ships = getShips(numMiniShip, numSmallShip, numMediumShip, numBigShip);
   for (let i = 0; i < ships.length; i += 1) {
-    let cellPositions = getShipPosition(size, rows, ships[i].cellsNum);
+    const cellPositions = getShipPosition(size, rows, ships[i].cellsNum);
     if (!cellPositions[0]) {
-      i = 0;
-      cellPositions = getShipPosition(size, rows, ships[i].cellsNum);
+      i -= 1;
     }
     rows = updateRows(rows, cellPositions);
   }

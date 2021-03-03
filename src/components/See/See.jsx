@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { useEffect, useCallback, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import './See.scss';
 import { Button } from 'react-bootstrap';
 
-// Sound
-import { Howl } from 'howler';
-
 import { HERE_IS_LOSER, ATTACK_TIME, audioSrs } from '~constants';
 import { missHit, countAttacks, randomPlay } from '~store/game/actions';
+
+// Sound
+const laser = new Audio(audioSrs.laser);
 
 export default function See({
   id, num, player, value,
@@ -17,6 +17,7 @@ export default function See({
   const classes = `content see ${value === HERE_IS_LOSER ? 'lose' : ''}`;
   const dispatch = useDispatch();
   const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
+  const isCurrentGameOver = useSelector(({ game: { isGameOver } }) => isGameOver);
   const whoseTurn = useSelector(({ game: { activePlayer } }) => activePlayer);
   const userBoard = useSelector(({ game: { user } }) => user);
   const enemy = +!whoseTurn;
@@ -25,44 +26,17 @@ export default function See({
   const lastAttacks = useSelector(({ game: { [enemy]: { attacks } } }) => attacks);
   const userTurn = useSelector(({ game: { user } }) => user);
   const isAutoPlay = useSelector(({ game: { [userTurn]: { autoPlay } } }) => autoPlay);
-  const isGameStarted = useSelector(({ game: { isPlaying } }) => isPlaying);
   const isSoundOn = useSelector(({ app: { isSound } }) => isSound);
-  const soundLaser = useMemo(() => new Howl({
-    src: [audioSrs.laser],
-  }), []);
-
-  const soundCall = useCallback(
-    () => {
-      if (player === userBoard
-        && value === HERE_IS_LOSER
-        && isSoundOn
-        && isGameStarted
-        && isPlay
-        && userTurn !== whoseTurn
-      ) {
-        soundLaser.play();
-      }
-    }, [
-      isGameStarted,
-      isSoundOn,
-      value,
-      player,
-      userBoard,
-      userTurn,
-      whoseTurn,
-      soundLaser,
-      isPlay,
-    ],
-  );
+  const soundVolumeValue = useSelector(({ app: { soundVolume } }) => soundVolume);
+  laser.volume = soundVolumeValue;
 
   function onAttack() {
     if (player !== userBoard
-      && value === HERE_IS_LOSER
       && isSoundOn
       && isPlay
-      && isGameStarted
+      && !isCurrentGameOver
     ) {
-      soundLaser.play();
+      laser.play();
     }
     dispatch(countAttacks(whoseTurn));
     dispatch(missHit(id, num, player));
@@ -72,7 +46,25 @@ export default function See({
     return () => clearInterval(interval);
   }
 
-  useEffect(() => soundCall(), [soundCall]);
+  useEffect(() => {
+    if (player === userBoard
+      && value === HERE_IS_LOSER
+      && isSoundOn
+      && isPlay
+      && !isCurrentGameOver
+      && whoseTurn !== userBoard
+    ) {
+      laser.play();
+    }
+  }, [
+    isSoundOn,
+    value,
+    player,
+    userBoard,
+    isPlay,
+    isCurrentGameOver,
+    whoseTurn,
+  ]);
 
   return (
     <Button

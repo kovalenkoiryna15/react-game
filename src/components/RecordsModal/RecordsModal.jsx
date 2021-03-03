@@ -7,8 +7,6 @@ import './RecordsModal.scss';
 
 import RecordsSVG from '~components/RecordsSVG';
 
-import bgImgUrl from '~images/wallpaper1.jpg';
-
 import { toggleRecordsModal } from '~store/app/actions';
 
 export default function RecordsModal() {
@@ -27,11 +25,7 @@ export default function RecordsModal() {
       className="records-modal"
       centered
       aria-labelledby="contained-modal-title-vcenter"
-      dialogClassName="modal-100w"
       onHide={onRecords}
-      style={{
-        background: `center / cover no-repeat url(${bgImgUrl})`,
-      }}
     >
       <Modal.Header closeButton className="text-center justify-content-center align-items-center">
         <Row className="text-center justify-content-center align-items-center w-100" id="contained-modal-title-vcenter">

@@ -30,6 +30,11 @@ export const toggleRecordsModal = () => ({
   payload: undefined,
 });
 
+export const toggleInfoModal = () => ({
+  type: t.TOGGLE_INFO_MODAL,
+  payload: undefined,
+});
+
 export const toggleFinishModal = () => ({
   type: t.TOGGLE_FINISH_MODAL,
   payload: undefined,

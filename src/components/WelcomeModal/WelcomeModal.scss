@@ -1,17 +1,19 @@
 .modal.welcome-modal {
   color: #ed044b;
-  min-width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
 
   & .modal-dialog {
-    min-width: 100vw;
-    min-height: 100vh;
-    margin: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
     background-color: transparent;
 
     & .modal-content {
-      min-width: 100vw;
-      min-height: 100vh;
+      min-width: 50vw;
+      min-height: 50vh;
       border-radius: none;
       border: none;
       background-color: transparent;
@@ -25,7 +27,7 @@
 
         & .modal-container {
           padding: 0.5rem;
-          background-color: rgba(51, 51, 51, 0.4);
+          background-color: rgba(51, 51, 51, 1);
         }
       }
     }

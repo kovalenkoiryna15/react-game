@@ -5,9 +5,6 @@ import {
 } from 'react-bootstrap';
 import './WelcomeModal.scss';
 
-import bgImgUrl from '~images/wp1814937.jpg';
-
-import Footer from '~components/Footer';
 import SoundOnSVG from '~components/Sound/SoundOnSVG';
 import SoundOffSVG from '~components/Sound/SoundOffSVG';
 import RecordsSVG from '~components/RecordsSVG';
@@ -15,12 +12,13 @@ import NewGameSVG from '~components/NewGameSVG';
 
 import { resetGame, resetIsPlaying } from '~store/game/actions';
 import {
-  toggleWelcomeModal, resetSound, toggleRecordsModal, toggleOptionsModal,
+  toggleWelcomeModal, resetSound, toggleRecordsModal, toggleOptionsModal, resetMusic,
 } from '~store/app/actions';
 
 export default function WelcomeModal() {
   const dispatch = useDispatch();
   const isSoundOn = useSelector(({ app: { isSound } }) => isSound);
+  const isMusicOn = useSelector(({ app: { isMusic } }) => isMusic);
   const isVisible = useSelector(({ app: { isWelcomeVisible } }) => isWelcomeVisible);
   const loading = useSelector(({ app: { isLoading } }) => isLoading);
 
@@ -37,6 +35,10 @@ export default function WelcomeModal() {
     dispatch(toggleRecordsModal());
   }
 
+  function onMusicReset() {
+    dispatch(resetMusic());
+  }
+
   function onOptions() {
     dispatch(resetGame());
     dispatch(toggleWelcomeModal());
@@ -50,11 +52,7 @@ export default function WelcomeModal() {
       className="welcome-modal"
       centered
       aria-labelledby="contained-modal-title-vcenter"
-      dialogClassName="modal-100w"
       onHide={() => null}
-      style={{
-        background: `center / cover no-repeat url(${bgImgUrl})`,
-      }}
     >
       <Modal.Body>
         <Container
@@ -91,6 +89,17 @@ export default function WelcomeModal() {
                         }
                       </Button>
                     </Col>
+                    <Col lg={12} md={12} sm={12} xs={12}>
+                      <Button
+                        className="w-100 options btn-svg"
+                        onClick={onMusicReset}
+                      >
+                        <span>Music</span>
+                        {
+                          isMusicOn ? <SoundOnSVG /> : <SoundOffSVG />
+                        }
+                      </Button>
+                    </Col>
                   </Row>
                 </Col>
               </Row>
@@ -98,9 +107,6 @@ export default function WelcomeModal() {
           </Row>
         </Container>
       </Modal.Body>
-      <Modal.Footer className="pt-0 pb-0">
-        <Footer />
-      </Modal.Footer>
     </Modal>
   );
 }
