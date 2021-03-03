@@ -15,7 +15,7 @@ import ColorSelect from '~components/ColorSelect';
 
 import * as c from '~constants';
 import {
-  setRandom, validateShipsNum, resetIsShipNumValid, resetIsPlaying,
+  resetGame, setRandom, validateShipsNum, resetIsShipNumValid, resetIsPlaying,
 } from '~store/game/actions';
 import { toggleOptionsModal, clearAlertMessage } from '~store/app/actions';
 
@@ -48,6 +48,7 @@ export default function OptionsModal() {
 
   useEffect(() => {
     if (isValid) {
+      dispatch(resetGame());
       playersIDs.forEach((player) => dispatch(
         setRandom(player, numMiniShip, numSmallShip, numMediumShip, numBigShip),
       ));

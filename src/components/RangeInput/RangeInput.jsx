@@ -59,7 +59,7 @@ const RangeInput = ({ max, ship }) => {
           max={max}
           step="1"
           list="options"
-          onInput={onChange}
+          onChange={onChange}
           className="custom-range range__input"
           id="ship-range"
         />

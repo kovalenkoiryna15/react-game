@@ -48,9 +48,12 @@ export default function Game() {
   const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
 
   useEffect(() => {
-    dispatch(writeLocal({
-      size: boardSize, activePlayer: whoseTurn, records: userRecords,
-    }, gameStorageKey));
+    dispatch(
+      writeLocal({
+        size: boardSize, activePlayer: whoseTurn, records: userRecords,
+      },
+      gameStorageKey),
+    );
     playersIDs.forEach((player) => {
       if (player === whoseTurn) {
         dispatch(writeLocal(whoseTurnState, player));
@@ -67,10 +70,10 @@ export default function Game() {
         );
         return () => clearInterval(interval);
       }
-    } else {
+    }
+    if (isPlay && enemyShipCount === enemyFired) {
       dispatch(gameOver());
-      dispatch(toggleFinishModal());
-      if (userTurn === whoseTurn) {
+      if (userTurn === whoseTurn && userAttacks) {
         const { date, time } = getDateTime();
         dispatch(saveToRecords({ userAttacks, date, time }));
       }

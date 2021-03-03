@@ -9,9 +9,8 @@ import TrophySVG from './TrophySVG';
 import RecordsSVG from '~components/RecordsSVG';
 import NewGameSVG from '~components/NewGameSVG';
 import {
-  toggleFinishModal, toggleWelcomeModal, toggleRecordsModal, toggleOptionsModal,
+  toggleFinishModal, toggleRecordsModal, toggleOptionsModal,
 } from '~store/app/actions';
-import { resetGame } from '~store/game/actions';
 
 export default function FinishModal() {
   const dispatch = useDispatch();
@@ -23,8 +22,6 @@ export default function FinishModal() {
   }
 
   function onOptions() {
-    dispatch(resetGame());
-    dispatch(toggleWelcomeModal());
     dispatch(toggleFinishModal());
     dispatch(toggleOptionsModal());
   }
