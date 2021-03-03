@@ -1,0 +1,30 @@
+.modal.info-modal {
+  color: #ed044b;
+
+  & .modal-dialog {
+    background-color: transparent;
+
+    & .modal-content {
+      border-radius: none;
+      border: none;
+      background-color: rgba(51, 51, 51, 1);
+
+      & .modal-header {
+        padding: 0.5rem;
+        background-color: rgba(51, 51, 51, 1);
+      }
+
+      & .modal-body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(51, 51, 51, 1);
+
+        & .modal-container {
+          padding: 0.5rem;
+          background-color: rgba(51, 51, 51, 1);
+        }
+      }
+    }
+  }
+}

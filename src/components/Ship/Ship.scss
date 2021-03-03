@@ -1,0 +1,12 @@
+.square .content.ship {
+  background: rgba(0, 0, 0, 1);
+  overflow: hidden;
+}
+
+.ship.btn:disabled {
+  opacity: 1;
+}
+
+.square .content.ship.fired {
+  background: rgba(0, 0, 0, 0.7);
+}

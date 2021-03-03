@@ -1,0 +1,42 @@
+.modal.records-modal {
+  color: #ed044b;
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+
+  & .modal-dialog {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    background-color: transparent;
+
+    & .modal-content {
+      min-width: 50vw;
+      min-height: 50vh;
+      border-radius: none;
+      border: none;
+      background-color: rgba(51, 51, 51, 1);
+      border: 2px solid #ed044b;
+
+      & .modal-header {
+        padding: 0.5rem;
+        background-color: rgba(51, 51, 51, 1);
+      }
+
+      & .modal-body {
+        min-width: 70%;
+        min-height: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(51, 51, 51, 1);
+
+        & .modal-container {
+          padding: 0.5rem;
+          background-color: rgba(51, 51, 51, 1);
+        }
+      }
+    }
+  }
+}
