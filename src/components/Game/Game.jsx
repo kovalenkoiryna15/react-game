@@ -44,7 +44,7 @@ export default function Game() {
     ({ game: { [enemy]: { lastAttackValue } } }) => lastAttackValue,
   );
   const enemyFired = useSelector(({ game: { [enemy]: { firedShips } } }) => firedShips);
-  const enemyShipCount = useSelector(({ game: { [enemy]: { shipCount } } }) => shipCount);
+  const actualCellShipCount = useSelector(({ game: { actualShipNum } }) => actualShipNum);
   const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function Game() {
         dispatch(writeLocal(enemyState, player));
       }
     });
-    if (isPlay && enemyShipCount > enemyFired) {
+    if (isPlay && actualCellShipCount > enemyFired) {
       if ((isAutoPlay && lastWhoseTurnAttackV === HERE_IS_FIRE)
         || (isAutoPlay && lastEnemyAttackV === HERE_IS_LOSER)) {
         const interval = setTimeout(
@@ -71,7 +71,7 @@ export default function Game() {
         return () => clearInterval(interval);
       }
     }
-    if (isPlay && enemyShipCount === enemyFired) {
+    if (isPlay && actualCellShipCount === enemyFired) {
       dispatch(gameOver());
       if (userTurn === whoseTurn && userAttacks) {
         const { date, time } = getDateTime();
@@ -98,7 +98,7 @@ export default function Game() {
     whoseTurnState,
     gameStorageKey,
     enemyFired,
-    enemyShipCount,
+    actualCellShipCount,
     isCurrentGameOver,
     userRecords,
     userTurn,

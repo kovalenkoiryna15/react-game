@@ -125,10 +125,21 @@ export const readFailure = () => ({
   payload: undefined,
 });
 
-export const resetValidShipNum = (num) => ({
+export const resetValidShipNum = () => ({
   type: t.RESET_VALID_SHIP_NUM,
-  payload: num,
+  payload: undefined,
 });
+
+export const resetActualShipCount = (numMiniShip, numSmallShip, numMediumShip, numBigShip) => {
+  const count = Number(numMiniShip) * c.NUM_CELLS_MINI_SHIPS
+    + Number(numSmallShip) * c.NUM_CELLS_SMALL_SHIPS
+    + Number(numMediumShip) * c.NUM_CELLS_MEDIUM_SHIPS
+    + Number(numBigShip) * c.NUM_CELLS_BIG_SHIPS;
+  return {
+    type: t.RESET_ACTUAL_SHIP_NUM,
+    payload: count,
+  };
+};
 
 export const gameOver = () => ({
   type: t.GAME_OVER,
@@ -144,8 +155,7 @@ export const validateShipsNum = (miniShip, smallShip, mediumShip, bigShip) => as
   if (+miniShip === 0 && +smallShip === 0 && +mediumShip === 0 && +bigShip === 0) {
     dispatch(alertError('Minimum ship count 1. Please select at least 1 ship.'));
   } else {
-    const num = +miniShip + +smallShip + +mediumShip + +bigShip;
-    dispatch(resetValidShipNum(num));
+    dispatch(resetValidShipNum());
   }
 };
 

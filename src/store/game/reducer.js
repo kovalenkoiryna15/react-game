@@ -43,7 +43,6 @@ const initialState = {
     autoPlayAttack: {},
     lastAttackValue: c.HERE_IS_LOSER,
     progress: 100,
-    shipCount: c.MAX_SHIP_COUNT,
     firedShips: 0,
   },
   [c.PLAYER2]: {
@@ -55,7 +54,6 @@ const initialState = {
     autoPlayAttack: {},
     lastAttackValue: c.HERE_IS_LOSER,
     progress: c.MAX_LIFE,
-    shipCount: c.MAX_SHIP_COUNT,
     firedShips: 0,
   },
   activePlayer: c.PLAYER1,
@@ -64,6 +62,7 @@ const initialState = {
   isShipNumValid: false,
   isGameOver: false,
   records: [],
+  actualShipNum: 0,
 };
 
 /*
@@ -164,17 +163,13 @@ const handlers = {
       activePlayer: newActivePlayer,
     };
   },
-  [t.RESET_VALID_SHIP_NUM]: (state, { payload }) => ({
+  [t.RESET_VALID_SHIP_NUM]: (state) => ({
     ...state,
     isShipNumValid: !state.isShipNumValid,
-    [c.PLAYER1]: {
-      ...state[c.PLAYER1],
-      shipCount: payload,
-    },
-    [c.PLAYER2]: {
-      ...state[c.PLAYER2],
-      shipCount: payload,
-    },
+  }),
+  [t.RESET_ACTUAL_SHIP_NUM]: (state, action) => ({
+    ...state,
+    actualShipNum: action.payload,
   }),
   [t.RESET_AUTO_PLAY]: (state) => ({
     ...state,
@@ -199,7 +194,7 @@ const handlers = {
     activePlayer: c.PLAYER1,
   }),
   [t.RESET_LIFE]: (state, { payload: { player, fired } }) => {
-    const newLife = ((state.shipCount - fired) * 100) / state.shipCount;
+    const newLife = ((state.actualShipNum - fired) * 100) / state.actualShipNum;
     return {
       ...state,
       [player]: {
@@ -262,23 +257,26 @@ const handlers = {
     },
     [c.PLAYER1]: {
       ...state[c.PLAYER1],
+      rows: {},
+      name: c.PLAYER2_NAME,
       attacks: Array(0),
       attacksNum: 0,
       firedShips: 0,
       autoPlay: false,
       autoPlayAttack: {},
       lastAttackValue: c.HERE_IS_LOSER,
-      progress: 100,
+      progress: c.MAX_LIFE,
     },
     [c.PLAYER2]: {
       ...state[c.PLAYER2],
+      name: c.PLAYER2_NAME,
       attacks: Array(0),
       attacksNum: 0,
       firedShips: 0,
       autoPlay: true,
       autoPlayAttack: {},
       lastAttackValue: c.HERE_IS_LOSER,
-      progress: 100,
+      progress: c.MAX_LIFE,
     },
   }),
   [t.SET_GAME_STATE]: (state, { payload }) => ({

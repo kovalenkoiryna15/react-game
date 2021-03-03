@@ -26,6 +26,7 @@ export const MAX_LIFE = 100;
 export const MAX_RECORDS_NUM = 10;
 export const BOARD_SIZE = 10;
 export const MAX_SHIP_COUNT = 10;
+export const MAX_SHIP_CELL_COUNT = 20;
 export const ATTACK_TIME = 2000;
 export const GAME_STORAGE_KEY = 'battleship';
 export const DEFAULT_BACKGROUND_IMAGE_URL = bg1;
