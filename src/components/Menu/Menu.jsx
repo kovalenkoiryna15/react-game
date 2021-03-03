@@ -6,7 +6,9 @@ import './Menu.scss';
 
 import KeyboardEventHandler from 'react-keyboard-event-handler';
 
-import { resetGame, resetAutoPlay } from '~store/game/actions';
+import {
+  resetGame, resetAutoFinish, resetActualShipCount, setRandom, resetAutoPlay,
+} from '~store/game/actions';
 import {
   resetSound,
   toggleRecordsModal,
@@ -26,9 +28,9 @@ import RefreshSVG from '~components/RefreshSVG';
 import ImageIcoSVG from '~components/ImageIcoSVG';
 
 // Music
-import { audioSrs } from '~constants';
+import * as c from '~constants';
 
-const playback = new Audio(audioSrs.playbackMusic);
+const playback = new Audio(c.audioSrs.playbackMusic);
 playback.loop = true;
 
 export default function Menu() {
@@ -40,6 +42,12 @@ export default function Menu() {
   const musicVolumeValue = useSelector(({ app: { musicVolume } }) => musicVolume);
   const soundVolumeValue = useSelector(({ app: { soundVolume } }) => soundVolume);
   playback.volume = musicVolumeValue;
+  const playersIDs = useSelector(({ game: { players } }) => players);
+  const numMiniShip = useSelector(({ game: { [c.TYPE_MINI_SHIP]: { num } } }) => num);
+  const numSmallShip = useSelector(({ game: { [c.TYPE_SMALL_SHIP]: { num } } }) => num);
+  const numMediumShip = useSelector(({ game: { [c.TYPE_MEDIUM_SHIP]: { num } } }) => num);
+  const numBigShip = useSelector(({ game: { [c.TYPE_BIG_SHIP]: { num } } }) => num);
+  const isAutoPlayStarted = useSelector(({ game: { isAutoPlayOn } }) => isAutoPlayOn);
 
   function onOptions() {
     dispatch(resetGame());
@@ -64,6 +72,16 @@ export default function Menu() {
 
   function onAutoPlay() {
     dispatch(resetAutoPlay());
+    dispatch(resetGame());
+    dispatch(resetActualShipCount(numMiniShip, numSmallShip, numMediumShip, numBigShip));
+    playersIDs.forEach((player) => dispatch(
+      setRandom(player, numMiniShip, numSmallShip, numMediumShip, numBigShip),
+    ));
+    dispatch(resetAutoFinish());
+  }
+
+  function onAutoFinish() {
+    dispatch(resetAutoFinish());
   }
 
   function onMusicReset() {
@@ -107,7 +125,7 @@ export default function Menu() {
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options" onClick={onAutoPlay}>
+              <Button className="w-100 options" onClick={onAutoPlay} disabled={isAutoPlayStarted}>
                 Auto play
                 <KeyboardEventHandler
                   handleKeys={['shift+a']}
@@ -116,11 +134,11 @@ export default function Menu() {
               </Button>
             </Col>
             <Col lg={12} md={6} sm={12} xs={12}>
-              <Button className="w-100 options" onClick={onAutoPlay}>
+              <Button className="w-100 options" onClick={onAutoFinish}>
                 Auto finish
                 <KeyboardEventHandler
                   handleKeys={['shift+f']}
-                  onKeyEvent={onAutoPlay}
+                  onKeyEvent={onAutoFinish}
                 />
               </Button>
             </Col>

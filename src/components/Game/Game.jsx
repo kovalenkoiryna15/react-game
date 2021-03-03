@@ -14,7 +14,7 @@ import {
   HERE_IS_FIRE, ATTACK_TIME, HERE_IS_LOSER,
 } from '~constants';
 import {
-  randomPlay, writeLocal, gameOver, saveToRecords,
+  randomPlay, writeLocal, gameOver, saveToRecords, resetAutoPlay,
 } from '~store/game/actions';
 import { toggleFinishModal } from '~store/app/actions';
 
@@ -47,6 +47,7 @@ export default function Game() {
   const actualCellShipCount = useSelector(({ game: { actualShipNum } }) => actualShipNum);
   const isPlay = useSelector(({ game: { isPlaying } }) => isPlaying);
   const fired = useSelector(({ game: { [enemy]: { firedShips } } }) => firedShips);
+  const isAutoPlayStarted = useSelector(({ game: { isAutoPlayOn } }) => isAutoPlayOn);
 
   useEffect(() => {
     // SAVE TO LOCAL STORAGE GAME STATE
@@ -92,6 +93,10 @@ export default function Game() {
     if (isPlay && isCurrentGameOver) {
       dispatch(toggleFinishModal());
     }
+    // TOGGLE FINISH MODAL
+    if (isPlay && isCurrentGameOver && isAutoPlayStarted) {
+      dispatch(resetAutoPlay());
+    }
     return undefined;
   }, [
     fired,
@@ -116,6 +121,7 @@ export default function Game() {
     userTurn,
     userAttacks,
     dispatch,
+    isAutoPlayStarted,
   ]);
 
   return (

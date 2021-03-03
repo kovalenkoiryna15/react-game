@@ -61,6 +61,7 @@ const initialState = {
   storageKey: c.GAME_STORAGE_KEY,
   isShipNumValid: false,
   isGameOver: false,
+  isAutoPlayOn: false,
   records: [],
   actualShipNum: 0,
 };
@@ -174,7 +175,7 @@ const handlers = {
     ...state,
     actualShipNum: action.payload,
   }),
-  [t.RESET_AUTO_PLAY]: (state) => ({
+  [t.RESET_AUTO_FINISH]: (state) => ({
     ...state,
     [c.PLAYER1]: {
       ...state[c.PLAYER1],
@@ -184,6 +185,10 @@ const handlers = {
       ...state[c.PLAYER2],
       autoPlay: true,
     },
+  }),
+  [t.RESET_AUTO_PLAY]: (state) => ({
+    ...state,
+    isAutoPlayOn: !state.isAutoPlayOn,
   }),
   [t.RESET_SHIP_NUM]: (state, { payload: { type, value } }) => ({
     ...state,

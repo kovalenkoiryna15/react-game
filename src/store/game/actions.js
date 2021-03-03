@@ -17,6 +17,11 @@ export const setRandomShipPositions = (
   payload: { player, rows },
 });
 
+export const resetAutoFinish = () => ({
+  type: t.RESET_AUTO_FINISH,
+  payload: undefined,
+});
+
 export const resetAutoPlay = () => ({
   type: t.RESET_AUTO_PLAY,
   payload: undefined,
